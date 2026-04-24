@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Math Mastery — Exam Prep</title>
+<meta name="application-name" content="Math Mastery">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Math Prep">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#080f1a">
+<meta name="description" content="Math Mastery exam prep — algebra, probability, statistics, financial math, and risk modeling.">
+<link rel="manifest" href="data:application/manifest+json,{
+  %22name%22:%22Math%20Mastery%20Exam%20Prep%22,
+  %22short_name%22:%22Math%20Prep%22,
+  %22description%22:%22Math%20Mastery%20exam%20prep%20app%22,
+  %22start_url%22:%22.%22,
+  %22display%22:%22standalone%22,
+  %22background_color%22:%22%23080f1a%22,
+  %22theme_color%22:%22%23080f1a%22,
+  %22orientation%22:%22portrait%22,
+  %22icons%22:[
+    {%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20192%20192'%3E%3Crect%20width='192'%20height='192'%20fill='%23080f1a'/%3E%3Ccircle%20cx='96'%20cy='96'%20r='80'%20fill='%230d2137'/%3E%3Ctext%20x='96'%20y='118'%20font-size='90'%20text-anchor='middle'%20fill='%2300e5ff'%3E%E2%88%91%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22}
+  ]
+}">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#080f1a; --navy2:#0c1a2e; --blue:#0d2137;
+  --accent:#00e5ff; --accent2:#33eeff;
+  --green:#00c853; --red:#ff3d3d; --purple:#b44dff;
+  --white:#eef2f8; --gray:#6a84a0; --card:#0a1828; --border:#152840;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.025) 1px,transparent 1px);background-size:36px 36px;pointer-events:none;z-index:0;}
+.screen{display:none;position:relative;z-index:1;}
+.screen.active{display:flex;flex-direction:column;min-height:100vh;}
+#home{align-items:center;justify-content:center;padding:32px 20px;padding-top:calc(32px + env(safe-area-inset-top));gap:0;}
+.logo-badge{background:var(--accent);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;border-radius:2px;margin-bottom:20px;}
+.home-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(48px,12vw,90px);line-height:.9;text-align:center;text-transform:uppercase;margin-bottom:6px;}
+.home-title span{color:var(--accent);display:block;}
+.home-subtitle{color:var(--gray);font-size:14px;text-align:center;margin-bottom:24px;letter-spacing:.5px;}
+.home-progress{width:100%;max-width:380px;margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
+.hp-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:12px;}
+.hp-bars{display:flex;align-items:flex-end;gap:8px;height:60px;}
+.hp-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;}
+.hp-bar{width:100%;background:var(--accent);border-radius:3px 3px 0 0;min-height:4px;transition:height .5s ease;}
+.hp-bar.empty{background:var(--border);}
+.hp-score{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;color:var(--gray);}
+.hp-stats{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.hp-stat{text-align:center;flex:1;}
+.hp-stat-num{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--accent);line-height:1;}
+.hp-stat-label{font-size:10px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.hp-empty-msg{color:var(--gray);font-size:13px;text-align:center;padding:8px 0;}
+.btn-main{background:var(--accent);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:2px;text-transform:uppercase;border:none;padding:18px 44px;border-radius:4px;cursor:pointer;transition:all .15s;margin-bottom:16px;width:100%;max-width:380px;}
+.btn-main:hover{background:var(--accent2);transform:translateY(-2px);}
+.btn-formula-home{background:transparent;color:var(--gray);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;padding:12px 24px;border-radius:4px;cursor:pointer;transition:all .15s;width:100%;max-width:380px;}
+.btn-formula-home:hover{color:var(--accent);border-color:var(--accent);}
+#mode-select{align-items:center;justify-content:flex-start;padding:32px 20px 60px;padding-top:calc(32px + env(safe-area-inset-top));}
+.screen-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
+.screen-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(32px,8vw,56px);text-transform:uppercase;text-align:center;margin-bottom:20px;}
+.q-count-wrap{width:100%;max-width:420px;margin-bottom:20px;text-align:center;}
+.q-count-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:10px;}
+.q-count-pills{display:flex;gap:8px;justify-content:center;}
+.q-pill{background:var(--card);border:2px solid var(--border);color:var(--gray);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;width:58px;height:44px;border-radius:6px;cursor:pointer;transition:all .15s;}
+.q-pill:hover{border-color:var(--accent);color:var(--white);}
+.q-pill.active{background:var(--accent);border-color:var(--accent);color:var(--navy);}
+.mode-cards{display:flex;flex-direction:column;gap:12px;width:100%;max-width:420px;}
+.mode-card{background:var(--card);border:2px solid var(--border);border-radius:8px;padding:22px;cursor:pointer;transition:all .2s;text-align:left;width:100%;}
+.mode-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.mode-card.practice:hover{border-color:var(--green);}
+.mode-card.exam:hover{border-color:var(--accent);}
+.mode-card.flashcard:hover{border-color:var(--purple);}
+.mode-card.drill:hover{border-color:var(--red);}
+.mode-icon{font-size:26px;margin-bottom:8px;}
+.mode-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.mode-card.practice .mode-name{color:var(--green);}
+.mode-card.exam .mode-name{color:var(--accent);}
+.mode-card.flashcard .mode-name{color:var(--purple);}
+.mode-card.drill .mode-name{color:var(--red);}
+.mode-desc{color:var(--gray);font-size:13px;line-height:1.5;}
+.mode-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.pill{font-size:10px;padding:3px 9px;border-radius:20px;border:1px solid;letter-spacing:.5px;font-weight:600;}
+.mode-card.practice .pill{border-color:var(--green);color:var(--green);}
+.mode-card.exam .pill{border-color:var(--accent);color:var(--accent);}
+.mode-card.flashcard .pill{border-color:var(--purple);color:var(--purple);}
+.mode-card.drill .pill{border-color:var(--red);color:var(--red);}
+.btn-back{background:transparent;color:var(--gray);border:1px solid var(--border);font-family:'Barlow',sans-serif;font-size:13px;padding:9px 20px;border-radius:4px;cursor:pointer;margin-top:14px;transition:all .15s;}
+.btn-back:hover{color:var(--white);border-color:var(--gray);}
+.drill-unavail{font-size:11px;color:var(--red);text-align:center;margin-top:6px;display:none;}
+.quiz-header{background:var(--navy2);border-bottom:1px solid var(--border);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10;}
+.quiz-mode-badge{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:3px;flex-shrink:0;}
+.quiz-mode-badge.practice{background:rgba(0,200,83,.15);color:var(--green);}
+.quiz-mode-badge.exam{background:rgba(0,229,255,.15);color:var(--accent);}
+.quiz-mode-badge.flashcard{background:rgba(180,77,255,.15);color:var(--purple);}
+.quiz-mode-badge.drill{background:rgba(255,61,61,.15);color:var(--red);}
+.quiz-progress-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.quiz-counter{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:var(--white);letter-spacing:1px;}
+.progress-bar{width:100%;max-width:180px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease;}
+.practice .progress-fill{background:var(--green);}
+.flashcard .progress-fill{background:var(--purple);}
+.drill .progress-fill{background:var(--red);}
+.quiz-right-info{display:flex;align-items:center;gap:7px;}
+.streak-badge{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--accent);display:none;}
+.streak-badge.visible{display:block;}
+.timer-display{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--white);letter-spacing:1px;display:none;}
+.flag-btn,.tapout-btn,.tts-btn-hdr{background:none;border:1px solid var(--border);color:var(--gray);width:32px;height:32px;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.flag-btn.flagged{border-color:var(--accent);color:var(--accent);background:rgba(0,229,255,.1);}
+.tapout-btn{background:rgba(255,61,61,.1);border-color:rgba(255,61,61,.3);color:var(--red);}
+.tapout-btn:hover{background:rgba(255,61,61,.2);border-color:var(--red);}
+.quiz-action-row{display:flex;gap:10px;margin-bottom:16px;}
+.btn-hint{flex:1;background:rgba(180,77,255,.1);border:1px solid rgba(180,77,255,.35);color:var(--purple);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-hint:hover{background:rgba(180,77,255,.2);border-color:var(--purple);}
+.btn-hint:disabled{opacity:.35;cursor:default;}
+.btn-hint.used{opacity:.4;cursor:default;}
+.btn-formula-quiz{flex:1;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.3);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-formula-quiz:hover{background:rgba(0,229,255,.15);border-color:var(--accent);}
+.hint-box{background:rgba(180,77,255,.08);border:1px solid rgba(180,77,255,.3);border-radius:8px;padding:14px 16px;margin-bottom:16px;display:none;animation:fadeUp .2s ease;}
+.hint-box.visible{display:block;}
+.hint-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--purple);margin-bottom:6px;}
+.hint-text{font-size:13px;color:var(--white);opacity:.9;line-height:1.6;white-space:pre-line;}
+.streak-cost{font-size:10px;color:rgba(180,77,255,.6);margin-top:4px;font-style:italic;}
+#quiz{padding:0;min-height:100vh;}
+.quiz-body{padding:20px 18px 40px;max-width:640px;margin:0 auto;width:100%;}
+.q-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.category-tag{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+.tts-btn{background:var(--card);border:1px solid var(--border);color:var(--gray);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.tts-btn:hover{border-color:var(--accent);color:var(--accent);}
+.tts-btn.speaking{border-color:var(--accent);background:rgba(0,229,255,.15);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.4);}50%{box-shadow:0 0 0 6px rgba(0,229,255,0);}}
+.question-text{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(20px,5vw,28px);line-height:1.25;margin-bottom:24px;color:var(--white);}
+.options-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.option-btn{background:var(--card);border:2px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:15px;font-weight:500;padding:16px 18px;border-radius:8px;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:flex-start;gap:12px;line-height:1.4;}
+.option-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(0,229,255,.04);}
+.option-btn:disabled{cursor:default;}
+.option-letter{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;min-width:22px;color:var(--gray);line-height:1.2;flex-shrink:0;}
+.option-btn.correct{border-color:var(--green);background:rgba(0,200,83,.1);}
+.option-btn.correct .option-letter{color:var(--green);}
+.option-btn.selected-wrong{border-color:var(--red);background:rgba(255,61,61,.12);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.feedback-box{background:var(--card);border-left:4px solid var(--border);border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:16px;display:none;animation:fadeUp .2s ease;}
+.feedback-box.correct-fb{border-color:var(--green);background:rgba(0,200,83,.06);}
+.feedback-box.wrong-fb{border-color:var(--red);background:rgba(255,61,61,.06);}
+.feedback-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:1px;margin-bottom:6px;}
+.correct-fb .feedback-title{color:var(--green);}
+.wrong-fb .feedback-title{color:var(--red);}
+.feedback-text{font-size:13px;color:var(--white);opacity:.85;line-height:1.6;white-space:pre-line;}
+.tts-exp-row{display:flex;justify-content:flex-end;margin-top:8px;}
+.btn-next{background:var(--accent);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:2px;text-transform:uppercase;border:none;padding:16px 32px;border-radius:4px;cursor:pointer;transition:all .15s;width:100%;display:none;}
+.btn-next.visible{display:block;}
+.btn-next.practice-style{background:var(--green);}
+.btn-next.drill-style{background:var(--red);}
+.btn-next:hover{filter:brightness(1.1);transform:translateY(-1px);}
+/* ── CAT PICKER ──── */
+#cat-pick{align-items:center;padding:32px 20px 60px;padding-top:calc(32px + env(safe-area-inset-top));gap:0;}
+.cat-grid{display:flex;flex-wrap:wrap;gap:8px;width:100%;max-width:420px;margin-bottom:16px;}
+.cat-pill-btn{background:var(--card);border:2px solid var(--border);color:var(--gray);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;border-radius:6px;cursor:pointer;transition:all .15s;}
+.cat-pill-btn:hover{border-color:var(--accent);color:var(--white);}
+.cat-pill-btn.selected{background:rgba(0,229,255,.12);border-color:var(--accent);color:var(--accent);}
+.cat-selected-label{font-size:12px;color:var(--gray);margin-bottom:12px;text-align:center;}
+.cat-start-btn{background:var(--accent);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:2px;text-transform:uppercase;border:none;padding:15px 32px;border-radius:4px;cursor:pointer;width:100%;max-width:420px;margin-bottom:8px;}
+.cat-start-btn:disabled{opacity:.4;cursor:default;}
+.cat-all-btn{background:transparent;color:var(--gray);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;padding:12px 24px;border-radius:4px;cursor:pointer;width:100%;max-width:420px;transition:all .15s;margin-bottom:4px;}
+.cat-all-btn:hover{color:var(--white);border-color:var(--gray);}
+/* ── FLASHCARD ──── */
+#flashcard{padding:0;min-height:100vh;}
+.fc-header{background:var(--navy2);border-bottom:1px solid var(--border);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;}
+.fc-progress-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.fc-progress-fill{height:100%;background:var(--purple);border-radius:2px;transition:width .3s ease;}
+.fc-counts{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--gray);display:flex;gap:12px;}
+.fc-body{padding:20px 18px 40px;max-width:560px;margin:0 auto;width:100%;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.fc-cat{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--purple);}
+.fc-counter{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--gray);}
+.fc-card{width:100%;min-height:200px;background:var(--card);border:2px solid var(--border);border-radius:12px;padding:28px 24px;cursor:pointer;display:flex;flex-direction:column;perspective:1000px;transition:transform .3s,border-color .3s;}
+.fc-card:hover{border-color:var(--purple);}
+.fc-q{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(18px,4.5vw,24px);line-height:1.3;color:var(--white);}
+.fc-a{font-size:14px;color:var(--white);opacity:.9;line-height:1.7;margin-top:16px;display:none;white-space:pre-line;border-top:1px solid var(--border);padding-top:14px;}
+.fc-card.flipped{border-color:var(--purple);background:rgba(180,77,255,.05);}
+.fc-card.flipped .fc-a{display:block;}
+.fc-tap-hint{font-size:12px;color:var(--gray);letter-spacing:1px;text-align:center;}
+.fc-actions{display:flex;gap:12px;width:100%;}
+.fc-btn{flex:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px;text-transform:uppercase;padding:15px;border-radius:6px;cursor:pointer;border:none;transition:all .15s;}
+.fc-btn.missed{background:rgba(255,61,61,.15);color:var(--red);border:2px solid rgba(255,61,61,.4);}
+.fc-btn.missed:hover{background:rgba(255,61,61,.25);}
+.fc-btn.knew{background:rgba(0,200,83,.15);color:var(--green);border:2px solid rgba(0,200,83,.4);}
+.fc-btn.knew:hover{background:rgba(0,200,83,.25);}
+/* ── FC REVIEW ── */
+#fc-review{align-items:center;padding:40px 20px 60px;padding-top:calc(40px + env(safe-area-inset-top));gap:16px;}
+.fcr-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(36px,9vw,64px);text-transform:uppercase;text-align:center;}
+.fcr-sub{font-size:13px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-top:-8px;}
+.fcr-stats{display:flex;gap:24px;}
+.fcr-stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 28px;text-align:center;}
+.fcr-stat-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:48px;line-height:1;}
+.fcr-stat-num.green{color:var(--green);}
+.fcr-stat-num.purple{color:var(--purple);}
+.fcr-stat-label{font-size:11px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+.fcr-missed-list{width:100%;max-width:500px;display:flex;flex-direction:column;gap:12px;}
+.fcr-missed-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.fcr-missed-cat{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:6px;}
+.fcr-missed-q{font-size:14px;font-weight:600;margin-bottom:8px;}
+.fcr-missed-a{font-size:13px;color:var(--gray);line-height:1.5;white-space:pre-line;}
+/* ── FORMULA SHEET ── */
+#formula-sheet{padding:0;min-height:100vh;}
+.fs-header{background:var(--navy2);border-bottom:1px solid var(--border);padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top));display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;}
+.fs-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:1px;text-transform:uppercase;}
+.fs-tabs{display:flex;background:var(--navy2);border-bottom:1px solid var(--border);padding:0 16px;overflow-x:auto;gap:0;flex-shrink:0;}
+.fs-tab{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);background:none;border:none;padding:13px 16px;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .15s;}
+.fs-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.fs-panel{display:none;}
+.fs-panel.active{display:block;}
+.fs-body{padding:16px;max-width:700px;margin:0 auto;}
+.fs-section{margin-bottom:24px;}
+.fs-section-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.fs-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(21,40,64,.6);}
+.fs-formula{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px;color:var(--white);min-width:140px;flex-shrink:0;}
+.fs-desc{font-size:13px;color:var(--gray);line-height:1.55;}
+/* Multiplication Table */
+.mult-table-wrap{overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch;}
+.mult-table{border-collapse:collapse;table-layout:fixed;width:100%;}
+.mult-table td,.mult-table th{text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:clamp(11px,2.2vw,15px);font-weight:700;border:1px solid var(--border);padding:0;line-height:1;width:calc(100%/16);height:0;padding-bottom:calc(100%/16);}
+.mult-table th{background:var(--blue);color:var(--accent);font-weight:900;position:relative;}
+.mult-table td{background:var(--card);color:var(--white);position:relative;}
+.mult-table td span,.mult-table th span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.mult-table td.highlight{background:rgba(0,229,255,.08);color:var(--accent2);}
+.mult-table td.diagonal{background:rgba(0,229,255,.18);color:var(--accent);font-weight:900;}
+/* Glossary */
+.gl-section{margin-bottom:20px;}
+.gl-section-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.gl-item{padding:10px 0;border-bottom:1px solid rgba(21,40,64,.5);}
+.gl-term{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:var(--white);margin-bottom:4px;}
+.gl-def{font-size:13px;color:var(--gray);line-height:1.6;}
+/* ── RESULTS ── */
+#results{align-items:center;padding:32px 20px 60px;padding-top:calc(32px + env(safe-area-inset-top));gap:20px;}
+.results-header{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:480px;}
+.results-score-ring{background:var(--card);border:3px solid var(--border);border-radius:50%;width:130px;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+.results-score-ring.pass{border-color:var(--green);}
+.results-score-ring.fail{border-color:var(--red);}
+.score-fraction{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;color:var(--white);}
+.score-pct{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:var(--accent);}
+.results-score-ring.pass .score-pct{color:var(--green);}
+.results-score-ring.fail .score-pct{color:var(--red);}
+.results-verdict{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;text-transform:uppercase;text-align:center;}
+.results-verdict.pass{color:var(--green);}
+.results-verdict.fail{color:var(--accent);}
+.results-sub{font-size:13px;color:var(--gray);text-align:center;max-width:360px;line-height:1.5;}
+.category-breakdown{width:100%;max-width:480px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.breakdown-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:12px;}
+.breakdown-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.breakdown-cat{font-size:12px;color:var(--white);width:120px;flex-shrink:0;font-weight:600;}
+.breakdown-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.breakdown-bar{height:100%;border-radius:4px;transition:width .5s ease;}
+.breakdown-frac{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;width:36px;text-align:right;flex-shrink:0;}
+.results-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:480px;}
+.btn-review{background:var(--card);border:1px solid var(--border);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;padding:14px 24px;border-radius:6px;cursor:pointer;transition:all .15s;}
+.btn-review:hover{border-color:var(--accent);color:var(--accent);}
+.btn-home-res{background:transparent;color:var(--gray);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--border);padding:12px 24px;border-radius:4px;cursor:pointer;transition:all .15s;}
+.btn-home-res:hover{color:var(--white);border-color:var(--gray);}
+/* ── REVIEW ── */
+#review{padding:0;min-height:100vh;}
+.review-header{background:var(--navy2);border-bottom:1px solid var(--border);padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top));display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;}
+.review-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:1px;text-transform:uppercase;}
+.review-body{padding:16px;max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px;padding-bottom:40px;}
+.review-card{background:var(--card);border-radius:8px;padding:16px;border-left:4px solid var(--border);}
+.review-card.wrong-card{border-color:var(--red);}
+.review-card.flagged-card{border-color:var(--accent);}
+.review-q-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.review-status{font-size:16px;}
+.review-q-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+.review-q-text{font-size:15px;font-weight:600;margin-bottom:10px;line-height:1.4;}
+.review-answer-row{font-size:13px;padding:6px 10px;border-radius:4px;margin-bottom:6px;}
+.review-wrong-ans{background:rgba(255,61,61,.08);color:var(--red);}
+.review-correct-ans{background:rgba(0,200,83,.08);color:var(--green);}
+.review-explanation{font-size:12px;color:var(--gray);line-height:1.6;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);white-space:pre-line;}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(8,15,26,.8);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:28px 24px;max-width:360px;width:100%;text-align:center;}
+.modal-icon{font-size:36px;margin-bottom:12px;}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;text-transform:uppercase;margin-bottom:10px;}
+.modal-desc{font-size:14px;color:var(--gray);line-height:1.5;margin-bottom:20px;}
+.modal-actions{display:flex;flex-direction:column;gap:8px;}
+.modal-btn-confirm{background:var(--red);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px;text-transform:uppercase;border:none;padding:14px 24px;border-radius:4px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- ══ HOME ══════════════════════════════════════════════════════════ -->
+<div id="home" class="screen active">
+  <div class="logo-badge">∑ Math Mastery</div>
+  <div class="home-title">MATH<span>PREP</span></div>
+  <div class="home-subtitle">Algebra · Probability · Statistics · Finance · Risk</div>
+  <div class="home-progress">
+    <div class="hp-label">Recent Performance</div>
+    <div id="hp-bars-wrap"><div class="hp-empty-msg">No sessions yet — start your first test!</div></div>
+    <div class="hp-stats" id="hp-stats" style="display:none">
+      <div class="hp-stat"><div class="hp-stat-num" id="hp-best">—</div><div class="hp-stat-label">Best</div></div>
+      <div class="hp-stat"><div class="hp-stat-num" id="hp-avg">—</div><div class="hp-stat-label">Avg</div></div>
+      <div class="hp-stat"><div class="hp-stat-num" id="hp-sessions">0</div><div class="hp-stat-label">Sessions</div></div>
+    </div>
+  </div>
+  <button class="btn-main" onclick="showScreen('mode-select')">Start Studying →</button>
+  <button class="btn-formula-home" onclick="openSheet('formulas')">📐 Formula Sheet & Reference</button>
+</div>
+
+<!-- ══ MODE SELECT ════════════════════════════════════════════════════ -->
+<div id="mode-select" class="screen">
+  <div style="display:flex;flex-direction:column;align-items:center;padding:32px 20px 60px;padding-top:calc(32px + env(safe-area-inset-top));gap:0;width:100%;">
+    <div class="screen-label">Study Mode</div>
+    <div class="screen-title">Choose Mode</div>
+    <div class="q-count-wrap">
+      <div class="q-count-label">Questions per Session</div>
+      <div class="q-count-pills">
+        <button class="q-pill active" onclick="setCount(10,this)">10</button>
+        <button class="q-pill" onclick="setCount(20,this)">20</button>
+        <button class="q-pill" onclick="setCount(30,this)">30</button>
+        <button class="q-pill" onclick="setCount(50,this)">50</button>
+      </div>
+    </div>
+    <div class="mode-cards">
+      <button class="mode-card practice" onclick="openCatPicker('practice')">
+        <div class="mode-icon">📝</div>
+        <div class="mode-name">Practice</div>
+        <div class="mode-desc">Instant feedback after every answer. Hints available. Explanations walk through each step — great for learning.</div>
+        <div class="mode-pills"><span class="pill">Feedback</span><span class="pill">Step-by-step hints</span><span class="pill">Explanations</span></div>
+      </button>
+      <button class="mode-card exam" onclick="openCatPicker('exam')">
+        <div class="mode-icon">⏱</div>
+        <div class="mode-name">Exam Simulation</div>
+        <div class="mode-desc">No feedback until the end. Timer running. Mirrors real test conditions.</div>
+        <div class="mode-pills"><span class="pill">Timed</span><span class="pill">No hints</span><span class="pill">Results after</span></div>
+      </button>
+      <button class="mode-card flashcard" onclick="startFlashcard()">
+        <div class="mode-icon">🃏</div>
+        <div class="mode-name">Flashcards</div>
+        <div class="mode-desc">Flip cards to reveal step-by-step solutions. Tap "Knew It" or "Missed It" to track your mastery.</div>
+        <div class="mode-pills"><span class="pill">Step-by-step</span><span class="pill">Self-graded</span><span class="pill">All topics</span></div>
+      </button>
+      <button class="mode-card drill" id="drill-btn" onclick="openCatPicker('drill')">
+        <div class="mode-icon">🎯</div>
+        <div class="mode-name">Weak Spot Drill</div>
+        <div class="mode-desc">Focuses on your weakest topics. Requires 2+ completed sessions to unlock.</div>
+        <div class="mode-pills"><span class="pill">Targeted</span><span class="pill">Adaptive</span><span class="pill">2+ sessions</span></div>
+      </button>
+    </div>
+    <div class="drill-unavail" id="drill-unavail">Complete 2 sessions to unlock Drill mode</div>
+    <button class="btn-back" onclick="showScreen('home')">← Home</button>
+  </div>
+</div>
+
+<!-- ══ CAT PICKER ════════════════════════════════════════════════════ -->
+<div id="cat-pick" class="screen">
+  <div class="screen-label">Filter Topics</div>
+  <div class="screen-title">Pick Categories</div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div class="cat-selected-label" id="cat-selected-label">No categories selected — tap to choose</div>
+  <button class="cat-start-btn" id="cat-start-btn" onclick="startWithSelectedCats()" disabled>Start →</button>
+  <button class="cat-all-btn" onclick="startWithAllCats()">All Categories →</button>
+  <button class="btn-back" onclick="showScreen('mode-select')">← Back</button>
+</div>
+
+<!-- ══ QUIZ ════════════════════════════════════════════════════════════ -->
+<div id="quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-mode-badge" id="mode-badge">Practice</div>
+    <div class="quiz-progress-wrap">
+      <div class="quiz-counter" id="quiz-counter">Q 1 / 10</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <div class="quiz-right-info">
+      <div class="streak-badge" id="streak-badge">🔥 0</div>
+      <div class="timer-display" id="timer-display">00:00</div>
+      <button class="flag-btn" id="flag-btn" onclick="toggleFlag()" title="Flag question">🚩</button>
+      <button class="tts-btn-hdr tts-btn" id="tts-q-btn" onclick="speakQuestion()" title="Read question">🔊</button>
+      <button class="tapout-btn" onclick="tapOut()" title="End session">✗</button>
+    </div>
+  </div>
+  <div class="quiz-body">
+    <div class="q-top-row">
+      <div class="category-tag" id="q-category">CATEGORY</div>
+    </div>
+    <div class="question-text" id="q-text">Question text</div>
+    <div class="quiz-action-row" id="quiz-action-row">
+      <button class="btn-hint" id="btn-hint" onclick="useHint()">💡 Hint</button>
+      <button class="btn-formula-quiz" onclick="openSheet('formulas')">📐 Formulas</button>
+    </div>
+    <div class="hint-box" id="hint-box">
+      <div class="hint-label">💡 Step-by-Step Hint</div>
+      <div class="hint-text" id="hint-text"></div>
+      <div class="streak-cost" id="streak-cost-msg"></div>
+    </div>
+    <div class="options-list" id="options-list"></div>
+    <div class="feedback-box" id="feedback-box">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div class="feedback-title" id="feedback-title">✓ Correct!</div>
+        <button class="tts-btn" id="tts-exp-btn" onclick="speakExplanation()" style="display:none;flex-shrink:0;">🔊</button>
+      </div>
+      <div class="feedback-text" id="feedback-text"></div>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ FLASHCARD ════════════════════════════════════════════════════ -->
+<div id="flashcard" class="screen">
+  <div class="fc-header">
+    <button class="btn-back" style="margin:0;padding:6px 14px" onclick="showScreen('mode-select')">←</button>
+    <div class="fc-progress-bar"><div class="fc-progress-fill" id="fc-progress"></div></div>
+    <div class="fc-counts">
+      <span id="fc-knew-count" style="color:var(--green)">✓ 0</span>
+      <span id="fc-miss-count" style="color:var(--red)">○ 0</span>
+    </div>
+  </div>
+  <div class="fc-body">
+    <div class="fc-cat" id="fc-cat">Category</div>
+    <div class="fc-counter" id="fc-counter">1 / 1</div>
+    <div class="fc-tap-hint" id="fc-hint">Tap card to reveal step-by-step solution</div>
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-q" id="fc-q">Question</div>
+      <div class="fc-a" id="fc-a">Answer</div>
+    </div>
+    <div class="fc-actions" id="fc-actions" style="display:none">
+      <button class="fc-btn missed" onclick="fcAnswer(false)">○ Missed It</button>
+      <button class="fc-btn knew" onclick="fcAnswer(true)">✓ Knew It</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FC REVIEW ════════════════════════════════════════════════════ -->
+<div id="fc-review" class="screen">
+  <div class="fcr-title">Session<span style="color:var(--purple)"> Complete</span></div>
+  <div class="fcr-sub">Flashcard Results</div>
+  <div class="fcr-stats">
+    <div class="fcr-stat"><div class="fcr-stat-num green" id="fcr-knew">0</div><div class="fcr-stat-label">Knew It</div></div>
+    <div class="fcr-stat"><div class="fcr-stat-num purple" id="fcr-missed">0</div><div class="fcr-stat-label">Missed</div></div>
+  </div>
+  <div class="fcr-missed-list" id="fcr-missed-list"></div>
+  <button class="btn-main" style="max-width:420px" onclick="startFlashcard()">Retry All →</button>
+  <button class="btn-back" onclick="showScreen('mode-select')" style="margin-top:8px">← Back to Modes</button>
+</div>
+
+<!-- ══ FORMULA SHEET ════════════════════════════════════════════════ -->
+<div id="formula-sheet" class="screen">
+  <div class="fs-header">
+    <button class="btn-back" style="margin:0;padding:6px 14px" onclick="goBackFromFormula()">←</button>
+    <div class="fs-title">📐 Math Reference Guide</div>
+  </div>
+  <div class="fs-tabs">
+    <button class="fs-tab active" id="tab-formulas" onclick="switchTab('formulas')">Formulas</button>
+    <button class="fs-tab" id="tab-multtable" onclick="switchTab('multtable')">× Table</button>
+    <button class="fs-tab" id="tab-glossary" onclick="switchTab('glossary')">Glossary</button>
+  </div>
+
+  <div class="fs-panel active" id="panel-formulas">
+    <div class="fs-body">
+      <div class="fs-section">
+        <div class="fs-section-title">General Math</div>
+        <div class="fs-row"><div class="fs-formula">Order of Operations</div><div class="fs-desc">PEMDAS — Parentheses, Exponents, Multiplication/Division (left→right), Addition/Subtraction (left→right). Always solve what's in parentheses first.</div></div>
+        <div class="fs-row"><div class="fs-formula">Percentage</div><div class="fs-desc">Part ÷ Whole × 100 = %. To find part: Whole × (% ÷ 100). Example: 15 of 60 = 15÷60×100 = 25%.</div></div>
+        <div class="fs-row"><div class="fs-formula">Ratio</div><div class="fs-desc">a : b means for every a of one thing, there are b of another. To simplify, divide both sides by their GCD.</div></div>
+        <div class="fs-row"><div class="fs-formula">Proportion</div><div class="fs-desc">a/b = c/d → cross-multiply: a×d = b×c. Solve for the unknown.</div></div>
+        <div class="fs-row"><div class="fs-formula">Absolute Value</div><div class="fs-desc">|x| = distance from zero. Always positive. |−5| = 5. |5| = 5.</div></div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-title">Algebra</div>
+        <div class="fs-row"><div class="fs-formula">Solving Equations</div><div class="fs-desc">Do the same operation to both sides. Isolate the variable. Check your answer by plugging it back in.</div></div>
+        <div class="fs-row"><div class="fs-formula">Quadratic Formula</div><div class="fs-desc">x = (−b ± √(b²−4ac)) / 2a for ax²+bx+c=0. The discriminant (b²−4ac) tells you: positive=2 real roots, zero=1 root, negative=no real roots.</div></div>
+        <div class="fs-row"><div class="fs-formula">Slope-Intercept</div><div class="fs-desc">y = mx + b. m = slope (rise/run). b = y-intercept (where line crosses y-axis). Slope = (y₂−y₁) / (x₂−x₁).</div></div>
+        <div class="fs-row"><div class="fs-formula">FOIL (binomials)</div><div class="fs-desc">(a+b)(c+d) = ac + ad + bc + bd. First, Outside, Inside, Last. Example: (x+2)(x+3) = x²+3x+2x+6 = x²+5x+6.</div></div>
+        <div class="fs-row"><div class="fs-formula">Exponent Rules</div><div class="fs-desc">xᵃ × xᵇ = x^(a+b) | xᵃ ÷ xᵇ = x^(a−b) | (xᵃ)ᵇ = x^(ab) | x⁰ = 1 | x⁻¹ = 1/x.</div></div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-title">Probability</div>
+        <div class="fs-row"><div class="fs-formula">Basic Probability</div><div class="fs-desc">P(event) = Favorable outcomes ÷ Total outcomes. Always between 0 (impossible) and 1 (certain).</div></div>
+        <div class="fs-row"><div class="fs-formula">AND Rule</div><div class="fs-desc">P(A and B) = P(A) × P(B) — only if events are independent (one doesn't affect the other).</div></div>
+        <div class="fs-row"><div class="fs-formula">OR Rule</div><div class="fs-desc">P(A or B) = P(A) + P(B) − P(A and B). For mutually exclusive events (can't both happen): P(A) + P(B).</div></div>
+        <div class="fs-row"><div class="fs-formula">Complement Rule</div><div class="fs-desc">P(not A) = 1 − P(A). If P(rain) = 0.3, then P(no rain) = 0.7. They always add to 1.</div></div>
+        <div class="fs-row"><div class="fs-formula">Permutations</div><div class="fs-desc">Order matters. nPr = n! / (n−r)!. "How many ways can 3 people finish a race from 10?"</div></div>
+        <div class="fs-row"><div class="fs-formula">Combinations</div><div class="fs-desc">Order doesn't matter. nCr = n! / (r! × (n−r)!). "How many 3-person teams from 10?"</div></div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-title">Statistics</div>
+        <div class="fs-row"><div class="fs-formula">Mean (Average)</div><div class="fs-desc">Sum of all values ÷ count of values. Example: (4+7+9+10) ÷ 4 = 30 ÷ 4 = 7.5.</div></div>
+        <div class="fs-row"><div class="fs-formula">Median</div><div class="fs-desc">Middle value when sorted. If even count, average the two middle values. Resistant to outliers.</div></div>
+        <div class="fs-row"><div class="fs-formula">Mode</div><div class="fs-desc">Most frequently occurring value. A dataset can have no mode, one mode, or multiple modes.</div></div>
+        <div class="fs-row"><div class="fs-formula">Range</div><div class="fs-desc">Max − Min. Measures the spread of data. Example: {2, 5, 9, 14} → Range = 14 − 2 = 12.</div></div>
+        <div class="fs-row"><div class="fs-formula">Standard Deviation</div><div class="fs-desc">Measures how spread out values are from the mean. Low SD = data clustered near mean. High SD = widely spread.</div></div>
+        <div class="fs-row"><div class="fs-formula">Variance</div><div class="fs-desc">Standard Deviation squared (σ²). Average of squared differences from the mean.</div></div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-title">Financial Mathematics</div>
+        <div class="fs-row"><div class="fs-formula">Simple Interest</div><div class="fs-desc">I = P × r × t. Principal × rate × time. Example: $1000 at 5% for 3 years = 1000 × 0.05 × 3 = $150.</div></div>
+        <div class="fs-row"><div class="fs-formula">Compound Interest</div><div class="fs-desc">A = P(1 + r/n)^(nt). P=principal, r=annual rate, n=compounds per year, t=years.</div></div>
+        <div class="fs-row"><div class="fs-formula">Present Value</div><div class="fs-desc">PV = FV / (1 + r)^t. What is a future amount worth today? Discounting future cash flows back to now.</div></div>
+        <div class="fs-row"><div class="fs-formula">Future Value</div><div class="fs-desc">FV = PV × (1 + r)^t. What will an amount be worth in the future given a growth rate?</div></div>
+        <div class="fs-row"><div class="fs-formula">ROI</div><div class="fs-desc">Return on Investment = (Gain − Cost) / Cost × 100%. Example: Spent $200, earned $300 → ROI = 100/200 × 100 = 50%.</div></div>
+        <div class="fs-row"><div class="fs-formula">Break-Even Point</div><div class="fs-desc">Break-Even = Fixed Costs ÷ (Price per unit − Variable cost per unit). Where revenue equals total costs.</div></div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-title">Risk & Probability Models</div>
+        <div class="fs-row"><div class="fs-formula">Expected Value</div><div class="fs-desc">E(X) = Σ[x × P(x)]. Multiply each outcome by its probability, then add. Example: 50% chance of $100 and 50% chance of $0 → E = 0.5×100 + 0.5×0 = $50.</div></div>
+        <div class="fs-row"><div class="fs-formula">Risk = Impact × Probability</div><div class="fs-desc">Risk Score = Severity of harm × Likelihood of occurrence. Used in risk matrices to prioritize threats.</div></div>
+        <div class="fs-row"><div class="fs-formula">Bayes' Theorem</div><div class="fs-desc">P(A|B) = P(B|A)×P(A) / P(B). Updates the probability of A given new evidence B. Foundation of conditional probability.</div></div>
+        <div class="fs-row"><div class="fs-formula">Normal Distribution</div><div class="fs-desc">68% of data within 1 SD, 95% within 2 SD, 99.7% within 3 SD of the mean. The "bell curve" rule.</div></div>
+        <div class="fs-row"><div class="fs-formula">Z-Score</div><div class="fs-desc">Z = (X − μ) / σ. How many standard deviations a value is from the mean. Z=0 is the mean, Z=1 is 1 SD above.</div></div>
+      </div>
+    </div>
+  </div><!-- end panel-formulas -->
+
+  <div class="fs-panel" id="panel-multtable">
+    <div class="fs-body">
+      <div class="fs-section">
+        <div class="fs-section-title">Multiplication Table (1–15)</div>
+        <p style="font-size:12px;color:var(--gray);margin-bottom:10px;">Highlighted diagonal = perfect squares (1, 4, 9, 16 … 225). Cyan cells = multiples of 10.</p>
+        <div class="mult-table-wrap">
+          <table class="mult-table" id="mult-table"></table>
+        </div>
+      </div>
+    </div>
+  </div><!-- end panel-multtable -->
+
+  <div class="fs-panel" id="panel-glossary">
+    <div class="fs-body" style="padding-top:8px">
+      <div class="gl-section">
+        <div class="gl-section-title">📐 Algebra Terms</div>
+        <div class="gl-item"><div class="gl-term">Variable</div><div class="gl-def">A letter (like x or y) that represents an unknown number. Your goal in algebra is usually to find the value of the variable.</div></div>
+        <div class="gl-item"><div class="gl-term">Coefficient</div><div class="gl-def">The number multiplied by a variable. In 3x, the coefficient is 3. In −7y², the coefficient is −7.</div></div>
+        <div class="gl-item"><div class="gl-term">Expression vs. Equation</div><div class="gl-def">Expression: a math phrase with no equals sign (3x + 2). Equation: has an equals sign and can be solved (3x + 2 = 11).</div></div>
+        <div class="gl-item"><div class="gl-term">Factor</div><div class="gl-def">Numbers or expressions you multiply together. Factors of 12: 1, 2, 3, 4, 6, 12. Factoring an equation = splitting it into multiplied parts.</div></div>
+        <div class="gl-item"><div class="gl-term">Inequality</div><div class="gl-def">A statement that one value is greater or less than another. x > 5 means x can be any number larger than 5. Note: flip the sign when multiplying/dividing by a negative.</div></div>
+      </div>
+      <div class="gl-section">
+        <div class="gl-section-title">🎲 Probability Terms</div>
+        <div class="gl-item"><div class="gl-term">Sample Space</div><div class="gl-def">All possible outcomes of an experiment. Rolling a die: sample space = {1, 2, 3, 4, 5, 6}. Probability is calculated from this set.</div></div>
+        <div class="gl-item"><div class="gl-term">Independent Events</div><div class="gl-def">Two events where one outcome doesn't affect the other. Example: flipping a coin twice — the first flip doesn't change the second.</div></div>
+        <div class="gl-item"><div class="gl-term">Mutually Exclusive</div><div class="gl-def">Events that cannot both happen at the same time. You can't roll a 2 AND a 5 on the same die roll. P(A or B) = P(A) + P(B).</div></div>
+        <div class="gl-item"><div class="gl-term">Conditional Probability</div><div class="gl-def">P(A | B) = "probability of A given B has already happened." The vertical bar | means "given." Example: P(rain | cloudy) = probability it rains, given it's already cloudy.</div></div>
+      </div>
+      <div class="gl-section">
+        <div class="gl-section-title">📊 Statistics Terms</div>
+        <div class="gl-item"><div class="gl-term">Outlier</div><div class="gl-def">A data point that is much higher or lower than the rest. Outliers drag the mean away from the center but don't affect the median — that's why the median is called "resistant."</div></div>
+        <div class="gl-item"><div class="gl-term">Skewed Distribution</div><div class="gl-def">Skewed right (positive): tail stretches right, mean > median. Skewed left (negative): tail stretches left, mean < median. Normal (symmetric): mean = median = mode.</div></div>
+        <div class="gl-item"><div class="gl-term">Correlation vs. Causation</div><div class="gl-def">Correlation means two variables tend to change together. Causation means one causes the other. Important: correlation does NOT prove causation.</div></div>
+        <div class="gl-item"><div class="gl-term">Confidence Interval</div><div class="gl-def">A range of values that likely contains the true population parameter. A 95% CI means: if you repeated the study 100 times, about 95 of the intervals would contain the true value.</div></div>
+      </div>
+      <div class="gl-section">
+        <div class="gl-section-title">💰 Financial Terms</div>
+        <div class="gl-item"><div class="gl-term">Principal</div><div class="gl-def">The original amount of money before interest. In $1000 at 5% interest, the principal is $1000. Interest is always calculated on the principal.</div></div>
+        <div class="gl-item"><div class="gl-term">Compounding</div><div class="gl-def">Earning interest on both the principal AND previously earned interest. "Compound interest is the eighth wonder of the world" — the more frequently it compounds, the faster money grows.</div></div>
+        <div class="gl-item"><div class="gl-term">Discount Rate</div><div class="gl-def">The rate used to calculate present value. Represents the time value of money — a dollar today is worth more than a dollar in the future because today's dollar can grow.</div></div>
+        <div class="gl-item"><div class="gl-term">Annuity</div><div class="gl-def">A series of equal payments made at regular intervals. Examples: monthly rent, loan payments, pension distributions. Can be valued using present value formulas.</div></div>
+      </div>
+      <div class="gl-section">
+        <div class="gl-section-title">⚠️ Risk Modeling Terms</div>
+        <div class="gl-item"><div class="gl-term">Expected Value (EV)</div><div class="gl-def">The average outcome if you repeated an event many times. Not what happens each time — it's the long-run average. EV of a fair coin flip for $1 = $0.50.</div></div>
+        <div class="gl-item"><div class="gl-term">Variance & Standard Deviation</div><div class="gl-def">Variance measures how spread out outcomes are. Standard deviation (SD) is its square root — easier to interpret because it's in the same units as the data. High SD = high uncertainty = more risk.</div></div>
+        <div class="gl-item"><div class="gl-term">Risk-Neutral vs. Risk-Averse</div><div class="gl-def">Risk-neutral: cares only about EV. Risk-averse: prefers a certain smaller gain over an uncertain larger one. Most people are risk-averse — that's why insurance exists.</div></div>
+        <div class="gl-item"><div class="gl-term">Monte Carlo Simulation</div><div class="gl-def">Running thousands of random simulations to model the probability of different outcomes. Used in finance and engineering to estimate risk when math alone gets too complex.</div></div>
+      </div>
+    </div>
+  </div><!-- end panel-glossary -->
+
+</div>
+
+<!-- ══ RESULTS ══════════════════════════════════════════════════════ -->
+<div id="results" class="screen">
+  <div class="results-header">
+    <div class="results-score-ring" id="score-ring">
+      <div class="score-fraction" id="score-fraction">0/10</div>
+      <div class="score-pct" id="score-pct">0%</div>
+    </div>
+    <div class="results-verdict" id="results-verdict">Results</div>
+    <div class="results-sub" id="results-sub"></div>
+  </div>
+  <div class="category-breakdown">
+    <div class="breakdown-title">Performance by Category</div>
+    <div id="breakdown-rows"></div>
+  </div>
+  <div class="results-actions">
+    <button class="btn-review" id="btn-flagged" onclick="showReview('flagged')" style="display:none">🚩 Review Flagged</button>
+    <button class="btn-review" onclick="showReview('wrong')">✗ Review Wrong Answers</button>
+    <button class="btn-main" onclick="showScreen('mode-select')" style="margin-bottom:0">Practice Again →</button>
+    <button class="btn-home-res" onclick="showScreen('home')">← Home</button>
+  </div>
+</div>
+
+<!-- ══ REVIEW ════════════════════════════════════════════════════════ -->
+<div id="review" class="screen">
+  <div class="review-header">
+    <button class="btn-back" style="margin:0;padding:6px 14px" onclick="showScreen('results')">←</button>
+    <div class="review-title" id="review-title">Review</div>
+  </div>
+  <div class="review-body" id="review-body"></div>
+</div>
+
+<!-- ══ TAP OUT MODAL ══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="tapout-modal" style="display:none" onclick="closeTapOut()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-icon">✋</div>
+    <div class="modal-title">Tap Out?</div>
+    <div class="modal-desc">You've answered <span id="tapout-count">0</span> questions. End the session and see your score?</div>
+    <div class="modal-actions">
+      <button class="modal-btn-confirm" onclick="confirmTapOut()">Yes, End Session</button>
+      <button class="btn-back" style="margin:0" onclick="closeTapOut()">Keep Going</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── QUESTIONS ──────────────────────────────────────────────────────
+const QUESTIONS = [
+// ── GENERAL MATH (10) ──────────────────────────────────────────────
+{id:1,cat:"General Math",hint:"PEMDAS! First handle what's inside the parentheses, then do exponents, then multiply or divide left to right, then add or subtract.\n\nStep 1: 3 + 4 = 7 (parentheses first)\nStep 2: 2 × 7 = 14 (multiplication)\nStep 3: 14 − 5 = 9 (subtraction)\nAnswer: 9",q:"What is 2 × (3 + 4) − 5?",opts:["4","9","11","3"],ans:1,exp:"Step 1: Parentheses first → 3 + 4 = 7\nStep 2: Multiply → 2 × 7 = 14\nStep 3: Subtract → 14 − 5 = 9\n\nPEMDAS tells us to always do what's in parentheses before anything else, then go left to right for × and ÷."},
+{id:2,cat:"General Math",hint:"To find a percentage, you divide the PART by the WHOLE, then multiply by 100.\n\nPart = 18, Whole = 72\nStep 1: 18 ÷ 72 = 0.25\nStep 2: 0.25 × 100 = 25%",q:"18 is what percent of 72?",opts:["20%","25%","30%","18%"],ans:1,exp:"Percentage = Part ÷ Whole × 100\n= 18 ÷ 72 × 100\n= 0.25 × 100\n= 25%\n\nTrick: 18/72 simplifies — divide both by 18 to get 1/4, and 1/4 = 25%."},
+{id:3,cat:"General Math",hint:"A ratio of 3:5 means every 3 of one thing goes with 5 of another. Total parts = 3+5 = 8.\n\nTo find each share, divide the total into 8 equal parts:\nStep 1: 40 ÷ 8 = 5 (value of 1 part)\nStep 2: Person A gets 3 × 5 = 15",q:"A prize of $40 is split in the ratio 3:5. How much does the larger share receive?",opts:["$15","$20","$25","$30"],ans:2,exp:"Ratio 3:5 means total parts = 3 + 5 = 8\nStep 1: Value of 1 part = $40 ÷ 8 = $5\nStep 2: Larger share (5 parts) = 5 × $5 = $25\n\nAlways find the value of ONE part first, then multiply by how many parts you need."},
+{id:4,cat:"General Math",hint:"Absolute value is just the distance from zero on a number line — it's always positive!\n\n|−8| = 8 (distance of 8 from zero)\n|3| = 3 (distance of 3 from zero)\n\nNow just subtract: 8 − 3 = 5",q:"What is |−8| − |3|?",opts:["−11","5","11","−5"],ans:1,exp:"|−8| = 8 (absolute value strips the negative sign)\n|3| = 3\n8 − 3 = 5\n\nAbsolute value is always the positive distance from zero. |−8| and |8| are both equal to 8."},
+{id:5,cat:"General Math",hint:"'How many times does one number go into another?' = division!\n\nStep 1: 504 ÷ 7 = ?\nStep 2: Think: 7 × 70 = 490, so 504 − 490 = 14\nStep 3: 14 ÷ 7 = 2\nSo 70 + 2 = 72",q:"504 ÷ 7 = ?",opts:["62","72","82","74"],ans:1,exp:"504 ÷ 7:\nStep 1: 7 × 70 = 490\nStep 2: 504 − 490 = 14 left over\nStep 3: 14 ÷ 7 = 2\nTotal: 70 + 2 = 72\n\nAlways check: 72 × 7 = 504 ✓"},
+{id:6,cat:"General Math",hint:"A proportion sets two fractions equal. Cross-multiply to solve!\n\nx/15 = 4/5\nCross-multiply: x × 5 = 15 × 4\n5x = 60\nx = 60 ÷ 5 = 12",q:"If x/15 = 4/5, what is x?",opts:["8","10","12","16"],ans:2,exp:"Proportion: x/15 = 4/5\nCross multiply: 5x = 15 × 4 = 60\nDivide both sides by 5: x = 12\n\nCross multiplication works because equal fractions have equal cross products."},
+{id:7,cat:"General Math",hint:"'What percent increase' means: how much did it grow, compared to where it started?\n\nStep 1: Find the increase → 90 − 75 = 15\nStep 2: Divide by the ORIGINAL (not the new number!) → 15 ÷ 75 = 0.20\nStep 3: Multiply by 100 → 20%",q:"A price rises from $75 to $90. What is the percentage increase?",opts:["15%","17%","20%","25%"],ans:2,exp:"Percentage increase = (New − Old) ÷ Old × 100\n= (90 − 75) ÷ 75 × 100\n= 15 ÷ 75 × 100\n= 0.20 × 100\n= 20%\n\nAlways divide by the ORIGINAL value, not the new one."},
+{id:8,cat:"General Math",hint:"GCD = Greatest Common Divisor = the biggest number that divides into both evenly.\n\nFactors of 36: 1,2,3,4,6,9,12,18,36\nFactors of 48: 1,2,3,4,6,8,12,16,24,48\n\nLargest shared factor = 12!",q:"What is the Greatest Common Divisor (GCD) of 36 and 48?",opts:["6","8","12","18"],ans:2,exp:"Factors of 36: 1, 2, 3, 4, 6, 9, 12, 18, 36\nFactors of 48: 1, 2, 3, 4, 6, 8, 12, 16, 24, 48\nCommon factors: 1, 2, 3, 4, 6, 12\nGreatest: 12\n\nThe GCD is used to simplify fractions. 36/48 simplified = 36÷12 / 48÷12 = 3/4."},
+{id:9,cat:"General Math",hint:"A number's square root asks: what number times itself equals this?\n\n√144 = ? means: ? × ? = 144\nThink: 12 × 12 = 144 ✓",q:"What is √144?",opts:["11","12","13","14"],ans:1,exp:"√144 = 12, because 12 × 12 = 144.\n\nPerfect squares to memorize: 1,4,9,16,25,36,49,64,81,100,121,144,169,196,225."},
+{id:10,cat:"General Math",hint:"LCM = Least Common Multiple = the smallest number both numbers divide into evenly.\n\nMultiples of 4: 4, 8, 12, 16, 20...\nMultiples of 6: 6, 12, 18, 24...\n\nFirst number they share = 12!",q:"What is the Least Common Multiple (LCM) of 4 and 6?",opts:["8","10","12","24"],ans:2,exp:"Multiples of 4: 4, 8, 12, 16...\nMultiples of 6: 6, 12, 18...\nSmallest shared multiple: 12\n\nLCM is used to add fractions with different denominators. To add 1/4 + 1/6, you'd use 12 as the common denominator."},
+
+// ── ALGEBRA (10) ──────────────────────────────────────────────────
+{id:11,cat:"Algebra",hint:"To solve for x, do the OPPOSITE operation to both sides.\n\n3x + 7 = 22\nStep 1: Subtract 7 from both sides → 3x = 15\nStep 2: Divide both sides by 3 → x = 5\n\nAlways check: 3(5) + 7 = 22 ✓",q:"Solve for x: 3x + 7 = 22",opts:["x = 3","x = 4","x = 5","x = 6"],ans:2,exp:"3x + 7 = 22\nStep 1: Subtract 7 from both sides → 3x = 15\nStep 2: Divide both sides by 3 → x = 5\nCheck: 3(5) + 7 = 15 + 7 = 22 ✓\n\nIsolate the variable by undoing what was done to it — in reverse order."},
+{id:12,cat:"Algebra",hint:"When you see (a + b)², expand it using FOIL:\n(a + b)² = (a + b)(a + b) = a² + ab + ab + b² = a² + 2ab + b²\n\nWith (x + 3)²:\na = x, b = 3\nx² + 2(x)(3) + 3² = x² + 6x + 9",q:"Expand: (x + 3)²",opts:["x² + 9","x² + 3x + 9","x² + 6x + 9","x² + 6x + 6"],ans:2,exp:"(x + 3)² = (x + 3)(x + 3)\nFOIL: x·x + x·3 + 3·x + 3·3\n= x² + 3x + 3x + 9\n= x² + 6x + 9\n\nMemory shortcut: (a+b)² = a² + 2ab + b². The middle term is ALWAYS 2ab!"},
+{id:13,cat:"Algebra",hint:"Slope = how steep a line is = rise ÷ run = vertical change ÷ horizontal change.\n\nFormula: m = (y₂ − y₁) ÷ (x₂ − x₁)\nPoint 1: (2, 3) → x₁=2, y₁=3\nPoint 2: (6, 11) → x₂=6, y₂=11\n\nm = (11−3) ÷ (6−2) = 8 ÷ 4 = 2",q:"What is the slope of the line through points (2, 3) and (6, 11)?",opts:["1","2","3","4"],ans:1,exp:"Slope m = (y₂ − y₁) / (x₂ − x₁)\n= (11 − 3) / (6 − 2)\n= 8 / 4\n= 2\n\nA slope of 2 means: for every 1 unit right, the line goes up 2 units."},
+{id:14,cat:"Algebra",hint:"Factor out what both terms have in common first!\n\nx² − 5x = 0\nBoth terms have x, so factor it out:\nx(x − 5) = 0\n\nNow use the Zero Product Property: if A × B = 0, then either A = 0 or B = 0.\nx = 0 OR x − 5 = 0 → x = 5",q:"Solve: x² − 5x = 0",opts:["x = 0 only","x = 5 only","x = 0 or x = 5","x = −5 or x = 5"],ans:2,exp:"x² − 5x = 0\nFactor: x(x − 5) = 0\nZero Product Property: either x = 0 OR (x − 5) = 0\nSolutions: x = 0 or x = 5\n\nNever divide both sides by x! You'd lose the solution x = 0. Always factor instead."},
+{id:15,cat:"Algebra",hint:"The quadratic formula works for any equation in the form ax² + bx + c = 0.\n\nHere: a=1, b=−3, c=−10\nDiscriminant = b² − 4ac = 9 − 4(1)(−10) = 9 + 40 = 49\n√49 = 7\n\nx = (3 + 7) / 2 = 5  OR  x = (3 − 7) / 2 = −2",q:"Using the quadratic formula, solve x² − 3x − 10 = 0.",opts:["x = 5 or x = −2","x = 2 or x = −5","x = 5 or x = 2","x = −5 or x = −2"],ans:0,exp:"a=1, b=−3, c=−10\nDiscriminant: (−3)² − 4(1)(−10) = 9 + 40 = 49\n√49 = 7\nx = (3 ± 7) / 2\nx₁ = (3 + 7) / 2 = 10/2 = 5\nx₂ = (3 − 7) / 2 = −4/2 = −2\n\nCheck: (5)(−2) = −10 = c/a ✓  and  5 + (−2) = 3 = −b/a ✓"},
+{id:16,cat:"Algebra",hint:"Apply the exponent rules:\nxᵃ × xᵇ = x^(a+b)  (same base = add exponents)\n\nx³ × x⁴ = x^(3+4) = x⁷\n\nThink of it as (x·x·x) × (x·x·x·x) = 7 x's multiplied together!",q:"Simplify: x³ × x⁴",opts:["x⁷","x¹²","2x⁷","x⁷ + x"],ans:0,exp:"x³ × x⁴ = x^(3+4) = x⁷\n\nRule: When multiplying like bases, ADD the exponents.\nx³ = x·x·x and x⁴ = x·x·x·x\nTogether: x·x·x·x·x·x·x = x⁷"},
+{id:17,cat:"Algebra",hint:"An inequality works just like an equation — but watch out: if you multiply or divide by a NEGATIVE number, you must FLIP the inequality sign!\n\n−2x < 8\nDivide both sides by −2 (negative!): flip the sign!\nx > −4",q:"Solve the inequality: −2x < 8",opts:["x < −4","x > −4","x < 4","x > 4"],ans:1,exp:"−2x < 8\nDivide both sides by −2 (negative number → FLIP the sign!)\nx > −4\n\nCritical rule: Multiplying or dividing both sides by a negative reverses the inequality. Always check with a test value: try x = 0: −2(0)=0 < 8 ✓, and 0 > −4 ✓."},
+{id:18,cat:"Algebra",hint:"Two equations, two unknowns. Use elimination or substitution!\n\nElimination method: add the equations together so one variable cancels.\n\nEquation 1: x + y = 10\nEquation 2: x − y = 4\nAdd them: 2x = 14 → x = 7\nPlug back in: 7 + y = 10 → y = 3",q:"Solve the system: x + y = 10 and x − y = 4.",opts:["x=6, y=4","x=7, y=3","x=8, y=2","x=5, y=5"],ans:1,exp:"Method: Add the equations to eliminate y.\n(x + y) + (x − y) = 10 + 4\n2x = 14\nx = 7\nSubstitute: 7 + y = 10 → y = 3\n\nCheck both: 7+3=10 ✓ and 7−3=4 ✓"},
+{id:19,cat:"Algebra",hint:"y = mx + b (slope-intercept form)\nm = slope, b = y-intercept\n\nThe slope m = 3 (given).\nNow plug in the point (2, 7) to find b:\n7 = 3(2) + b\n7 = 6 + b\nb = 1",q:"A line has slope 3 and passes through point (2, 7). What is the y-intercept?",opts:["b = 0","b = 1","b = 2","b = 3"],ans:1,exp:"Use slope-intercept form: y = mx + b\nPlug in m=3, x=2, y=7:\n7 = 3(2) + b\n7 = 6 + b\nb = 1\nFull equation: y = 3x + 1\n\nCheck: when x=2, y = 3(2)+1 = 7 ✓"},
+{id:20,cat:"Algebra",hint:"f(g(x)) means: first apply g to x, then apply f to that result.\n\nThis is called 'function composition.'\n\nStep 1: Find g(3) first → g(3) = 3² = 9\nStep 2: Now use that result in f → f(9) = 2(9) + 1 = 19",q:"If f(x) = 2x + 1 and g(x) = x², what is f(g(3))?",opts:["13","17","19","25"],ans:2,exp:"Step 1: Compute g(3) first (the inner function)\ng(3) = 3² = 9\nStep 2: Use that result in f\nf(9) = 2(9) + 1 = 18 + 1 = 19\n\nAlways work inside-out: f(g(x)) means do g first, then f."},
+
+// ── PROBABILITY (10) ──────────────────────────────────────────────
+{id:21,cat:"Probability",hint:"Probability = Favorable outcomes ÷ Total outcomes\n\nA standard die has 6 faces: 1,2,3,4,5,6\nEven numbers: 2, 4, 6 → 3 favorable outcomes\nTotal outcomes: 6\n\nP(even) = 3/6 = 1/2",q:"What is the probability of rolling an even number on a standard 6-sided die?",opts:["1/3","1/2","2/3","1/6"],ans:1,exp:"Even numbers on a die: {2, 4, 6} → 3 outcomes\nTotal outcomes: 6\nP(even) = 3/6 = 1/2\n\nSimplify fractions: 3/6 = 1/2. Half the numbers on a die are even."},
+{id:22,cat:"Probability",hint:"When two events can't both happen, they're 'mutually exclusive.'\n\nFor mutually exclusive events: P(A OR B) = P(A) + P(B)\n\nP(King) = 4/52 (four kings in a deck)\nP(Queen) = 4/52 (four queens in a deck)\nYou can't draw both at once, so add: 4/52 + 4/52 = 8/52 = 2/13",q:"From a standard 52-card deck, what is the probability of drawing a King or a Queen?",opts:["1/13","2/13","4/52","1/26"],ans:1,exp:"P(King) = 4/52\nP(Queen) = 4/52\nKing and Queen are mutually exclusive (one card can't be both)\nP(King or Queen) = 4/52 + 4/52 = 8/52 = 2/13"},
+{id:23,cat:"Probability",hint:"P(not A) = 1 − P(A). This is called the Complement Rule.\n\nAll probabilities add up to 1 (something must happen).\n\nP(rain) = 0.35\nP(no rain) = 1 − 0.35 = 0.65",q:"If the probability of rain is 0.35, what is the probability of no rain?",opts:["0.35","0.55","0.65","0.75"],ans:2,exp:"Complement Rule: P(not A) = 1 − P(A)\nP(no rain) = 1 − 0.35 = 0.65\n\nThe complement rule works because ALL possible outcomes must add up to 1. Either it rains or it doesn't — those two probabilities must sum to 1."},
+{id:24,cat:"Probability",hint:"For INDEPENDENT events (one flip doesn't affect the other), use the AND rule:\nP(A and B) = P(A) × P(B)\n\nP(Heads) = 1/2 for any flip\nP(H then H) = 1/2 × 1/2 = 1/4\n\nThink of it this way: if you flip twice, there are 4 outcomes (HH, HT, TH, TT) — only 1 is HH.",q:"What is the probability of flipping heads twice in a row with a fair coin?",opts:["1/2","1/3","1/4","1/8"],ans:2,exp:"P(Heads) = 1/2 for each flip\nFlips are independent (one flip doesn't affect the next)\nP(H and H) = P(H) × P(H) = 1/2 × 1/2 = 1/4\n\nAll possible outcomes: HH, HT, TH, TT. Only 1 out of 4 = HH. ✓"},
+{id:25,cat:"Probability",hint:"Permutations = arrangements where ORDER MATTERS.\nnPr = n! / (n−r)!\n\n'How many ways can 3 people finish a race from 5 runners?'\nn=5 (total runners), r=3 (positions to fill)\n\nStep 1: 1st place = 5 choices\nStep 2: 2nd place = 4 choices left\nStep 3: 3rd place = 3 choices left\n5 × 4 × 3 = 60",q:"How many ways can 3 people be arranged in 1st, 2nd, and 3rd place from a group of 5?",opts:["10","20","60","120"],ans:2,exp:"Permutation (order matters): ₅P₃ = 5!/(5-3)! = 5!/2!\n= (5×4×3×2×1)/(2×1) = 120/2 = 60\n\nOr think of it step by step: 5 choices for 1st × 4 for 2nd × 3 for 3rd = 60."},
+{id:26,cat:"Probability",hint:"Combinations = selections where ORDER DOESN'T MATTER.\nnCr = n! / (r! × (n−r)!)\n\n'Pick 2 from 5' — picking Alice+Bob is the same as picking Bob+Alice.\n\n₅C₂ = 5! / (2! × 3!) = (5×4) / (2×1) = 20/2 = 10",q:"How many ways can a 2-person committee be chosen from 5 candidates?",opts:["5","10","15","20"],ans:1,exp:"Combination (order doesn't matter): ₅C₂ = 5! / (2! × 3!)\n= (5 × 4) / (2 × 1) = 20/2 = 10\n\nWhy combination, not permutation? Because {Alice, Bob} = {Bob, Alice} — the same committee."},
+{id:27,cat:"Probability",hint:"Conditional probability: P(A | B) = 'probability of A, given B already happened'\nFormula: P(A|B) = P(A and B) / P(B)\n\nP(both defective) = 0.02\nP(second defective) = 0.10\n\nP(first | second defective) = 0.02 / 0.10 = 0.2",q:"In a factory, P(both items defective) = 0.02 and P(second item defective) = 0.10. What is P(first defective | second is defective)?",opts:["0.10","0.20","0.50","0.02"],ans:1,exp:"Conditional probability formula: P(A|B) = P(A and B) / P(B)\nP(1st defective | 2nd defective) = P(both defective) / P(2nd defective)\n= 0.02 / 0.10 = 0.20\n\nThis asks: of all times the 2nd item was defective, how often was the 1st also defective?"},
+{id:28,cat:"Probability",hint:"Expected value = the average outcome over many trials.\nE(X) = Σ[outcome × probability]\n\nGame outcomes:\n+$5 with P = 0.4\n−$2 with P = 0.6\n\nE = (5 × 0.4) + (−2 × 0.6)\nE = 2.00 + (−1.20) = $0.80",q:"A game pays $5 with probability 0.4 and loses $2 with probability 0.6. What is the expected value?",opts:["$0.40","$0.80","$1.20","$2.00"],ans:1,exp:"E(X) = Σ[x × P(x)]\n= (5 × 0.4) + (−2 × 0.6)\n= 2.00 + (−1.20)\n= $0.80\n\nA positive expected value means you'd profit over many games. Here, you'd average $0.80 gain per game."},
+{id:29,cat:"Probability",hint:"Bayes' Theorem updates probability based on new evidence.\nP(A|B) = P(B|A) × P(A) / P(B)\n\nP(Disease) = 0.01 (1% of people have it)\nP(Positive | Disease) = 0.95 (test is 95% accurate if you have it)\nP(Positive) = ?\n\nP(Positive) = 0.95×0.01 + 0.05×0.99 = 0.0095 + 0.0495 = 0.059",q:"A disease affects 1% of people. A test is 95% accurate. If positive, P(disease | positive) ≈ ?",opts:["95%","50%","16%","1%"],ans:2,exp:"Using Bayes' Theorem:\nP(D|+) = P(+|D) × P(D) / P(+)\nP(+) = P(+|D)×P(D) + P(+|No D)×P(No D)\n= 0.95×0.01 + 0.05×0.99 = 0.0095 + 0.0495 = 0.059\nP(D|+) = 0.0095 / 0.059 ≈ 0.16 = 16%\n\nThis is the 'base rate fallacy' — even with a 95% accurate test, false positives make the true positive rate much lower when disease is rare."},
+{id:30,cat:"Probability",hint:"A geometric distribution models 'how many trials until the first success?'\n\nP(first success on trial k) = (1−p)^(k−1) × p\n\nHere p = 0.2 (20% chance each time), k = 3 (first success on 3rd try)\nStep 1: Fail twice: (0.8)² = 0.64\nStep 2: Succeed on 3rd: × 0.2 = 0.128",q:"A player has a 20% chance of making a free throw each attempt. What is the probability the first success is on the 3rd attempt?",opts:["0.128","0.200","0.320","0.512"],ans:0,exp:"Geometric distribution: P(1st success on trial k) = (1−p)^(k−1) × p\nk=3, p=0.2\n= (1−0.2)^(3−1) × 0.2\n= (0.8)² × 0.2\n= 0.64 × 0.2\n= 0.128\n\nInterpretation: miss on attempt 1 (80%) × miss on attempt 2 (80%) × hit on attempt 3 (20%)."},
+
+// ── STATISTICS (10) ────────────────────────────────────────────────
+{id:31,cat:"Statistics",hint:"Mean = add all values and divide by how many there are.\n\nValues: 4, 8, 6, 10, 7\nStep 1: Add them → 4+8+6+10+7 = 35\nStep 2: Count them → 5 values\nStep 3: Divide → 35 ÷ 5 = 7",q:"Find the mean of: 4, 8, 6, 10, 7",opts:["6","7","8","7.5"],ans:1,exp:"Mean = Sum ÷ Count\n= (4 + 8 + 6 + 10 + 7) ÷ 5\n= 35 ÷ 5\n= 7\n\nThe mean is the balancing point of the data — if you placed the values on a number line, the mean is where it would balance."},
+{id:32,cat:"Statistics",hint:"Median = middle value when data is sorted.\n\nFirst, SORT the values: 3, 5, 7, 9, 12\nNow find the middle: 3, 5, [7], 9, 12\n\nThe 3rd value out of 5 is the middle → Median = 7",q:"Find the median of: 7, 3, 9, 5, 12",opts:["5","7","9","6"],ans:1,exp:"Step 1: Sort the data → 3, 5, 7, 9, 12\nStep 2: Find the middle value (5 values, so middle = 3rd)\nMedian = 7\n\nAlways sort FIRST. For an even count, average the two middle values."},
+{id:33,cat:"Statistics",hint:"Mode = the value that appears MOST OFTEN.\n\nData: 2, 4, 4, 5, 6, 6, 6, 8\nCount each:\n2 appears 1 time\n4 appears 2 times\n5 appears 1 time\n6 appears 3 times ← most!\n8 appears 1 time",q:"Find the mode of: 2, 4, 4, 5, 6, 6, 6, 8",opts:["4","5","6","8"],ans:2,exp:"Count frequencies:\n2 → 1 time\n4 → 2 times\n5 → 1 time\n6 → 3 times ← highest frequency\n8 → 1 time\nMode = 6"},
+{id:34,cat:"Statistics",hint:"Range = the distance between the highest and lowest values.\n\nData: 15, 22, 8, 30, 18\nStep 1: Find the maximum → 30\nStep 2: Find the minimum → 8\nStep 3: Subtract → 30 − 8 = 22",q:"What is the range of: 15, 22, 8, 30, 18?",opts:["14","18","22","30"],ans:2,exp:"Range = Maximum − Minimum\n= 30 − 8\n= 22\n\nThe range tells us how spread out the data is, but it's easily affected by extreme outliers."},
+{id:35,cat:"Statistics",hint:"An outlier is a value that is much higher or lower than the rest.\n\nThink about which measure the outlier will 'pull' toward itself:\n- The MEAN uses all values in its calculation, so a huge outlier drags it far from center.\n- The MEDIAN only looks at position (middle), so it barely moves.\n- The MODE just counts frequency — outliers don't affect it.\n\nAnswer: the mean is most affected.",q:"Which measure of central tendency is MOST affected by an outlier?",opts:["Mean","Median","Mode","Range"],ans:0,exp:"An outlier dramatically pulls the mean because the mean uses every value in its calculation.\n\nExample: {5, 6, 7, 8, 100}\nMean = 126/5 = 25.2 (pulled way up)\nMedian = 7 (barely affected)\n\nThat's why median is called 'resistant' — it ignores the extremes."},
+{id:36,cat:"Statistics",hint:"Standard deviation measures how 'spread out' data is from the mean.\n\nSame mean — but which has more variation?\n\nDataset A: 5, 5, 5, 5 → everyone is exactly at the mean. SD = 0!\nDataset B: 2, 4, 6, 8 → values spread from the mean. SD > 0\n\nLow SD = values cluster near the mean.",q:"Dataset A: {5, 5, 5, 5}. Dataset B: {2, 4, 6, 8}. Which has lower standard deviation?",opts:["Dataset A","Dataset B","They are equal","Cannot determine"],ans:0,exp:"Standard deviation measures spread from the mean.\nDataset A: All values = 5. Mean = 5. No variation. SD = 0.\nDataset B: Mean = 5. Values differ from mean. SD > 0.\n\nSD = 0 means zero spread — all values are identical. Dataset A has the lowest possible SD."},
+{id:37,cat:"Statistics",hint:"Z-score tells you how many standard deviations a value is above or below the mean.\n\nFormula: Z = (X − μ) / σ\nX = the value (85)\nμ = mean (70)\nσ = standard deviation (10)\n\nZ = (85 − 70) / 10 = 15/10 = 1.5",q:"A test has mean 70 and standard deviation 10. A student scores 85. What is their z-score?",opts:["1.0","1.5","2.0","0.85"],ans:1,exp:"Z = (X − μ) / σ\n= (85 − 70) / 10\n= 15 / 10\n= 1.5\n\nA z-score of 1.5 means the student scored 1.5 standard deviations above the mean — better than about 93% of test-takers."},
+{id:38,cat:"Statistics",hint:"In a normally distributed dataset (bell curve), there's a rule about how data clusters:\n\n→ 68% of data falls within 1 standard deviation of the mean\n→ 95% falls within 2 standard deviations\n→ 99.7% falls within 3 standard deviations\n\nThis is called the 68-95-99.7 rule (or Empirical Rule).",q:"In a normal distribution, approximately what percentage of data falls within 2 standard deviations of the mean?",opts:["68%","90%","95%","99.7%"],ans:2,exp:"The Empirical Rule (68-95-99.7 rule):\n• 1 SD from mean → 68% of data\n• 2 SD from mean → 95% of data\n• 3 SD from mean → 99.7% of data\n\nFor exam purposes: 2 SDs = 95%. This is why 95% confidence intervals are the most common in statistics."},
+{id:39,cat:"Statistics",hint:"A positive correlation means that as one variable increases, the other tends to increase too. But CORRELATION ≠ CAUSATION.\n\nEven if two things move together perfectly, it doesn't mean one is causing the other — they could both be caused by a third factor (a 'lurking variable').",q:"Two variables have a strong positive correlation. What can we conclude?",opts:["Variable A causes Variable B","They tend to increase together, but causation is not established","Variable B causes Variable A","The variables are identical"],ans:1,exp:"Correlation tells us two variables move together. It does NOT tell us why.\n\nClassic example: ice cream sales and drowning rates are correlated — but ice cream doesn't cause drowning! Both increase in summer (the real cause is hot weather).\n\nCorrelation describes relationship. Causation requires controlled experiments."},
+{id:40,cat:"Statistics",hint:"A 95% confidence interval has a specific meaning:\n\nIf you took 100 different random samples and built a 95% CI for each one, about 95 of those intervals would contain the true population mean.\n\nIt does NOT mean 'there's a 95% chance the mean is in this interval' — the mean is fixed, not random!",q:"A 95% confidence interval for mean height is [165cm, 175cm]. What does this mean?",opts:["95% of people are between 165 and 175cm","The true mean is definitely between 165 and 175cm","If we repeated sampling, 95% of such intervals would contain the true mean","There is a 5% chance the mean is outside this range"],ans:2,exp:"The correct interpretation: If we drew many samples and built 95% CIs for each, approximately 95% of those intervals would contain the true population mean.\n\nCommon wrong answers:\n× 'The true mean is definitely in the interval' — we're not 100% certain.\n× '95% of people fall in that range' — that describes data, not the mean."},
+
+// ── FINANCIAL MATHEMATICS (10) ─────────────────────────────────────
+{id:41,cat:"Financial Math",hint:"Simple interest only charges interest on the ORIGINAL amount (principal), not on previously earned interest.\n\nFormula: I = P × r × t\nP = $2000 (principal)\nr = 0.06 (6% = 6/100)\nt = 4 (years)\n\nI = 2000 × 0.06 × 4 = $480",q:"Calculate simple interest: $2,000 at 6% per year for 4 years.",opts:["$120","$360","$480","$520"],ans:2,exp:"Simple Interest: I = P × r × t\n= 2000 × 0.06 × 4\n= $480\n\nTotal amount: $2000 + $480 = $2480\n\nKey: simple interest uses the ORIGINAL principal every year — unlike compound interest, which builds on itself."},
+{id:42,cat:"Financial Math",hint:"Compound interest earns interest ON interest — your money grows faster!\n\nFormula: A = P(1 + r/n)^(nt)\nP = $1000\nr = 0.05 (5%)\nn = 1 (compounded yearly)\nt = 3 years\n\nA = 1000 × (1.05)³\n1.05³ = 1.157625\nA = $1,157.63",q:"$1,000 invested at 5% annually, compounded yearly, for 3 years. What is the final amount?",opts:["$1,150.00","$1,157.63","$1,200.00","$1,050.00"],ans:1,exp:"A = P(1 + r/n)^(nt)\n= 1000(1 + 0.05/1)^(1×3)\n= 1000(1.05)³\n= 1000 × 1.157625\n= $1,157.63\n\nVs. simple interest: $1000 × 0.05 × 3 = $150 → $1,150. Compounding earns an extra $7.63!"},
+{id:43,cat:"Financial Math",hint:"ROI (Return on Investment) measures how much profit you made relative to what you spent.\n\nFormula: ROI = (Gain − Cost) / Cost × 100%\n\nGain = $1,400 (what you sold it for)\nCost = $1,000 (what you paid)\n\nROI = (1400 − 1000) / 1000 × 100% = 400/1000 × 100% = 40%",q:"You invest $1,000 in stocks and sell for $1,400. What is your ROI?",opts:["14%","30%","40%","140%"],ans:2,exp:"ROI = (Gain − Cost) / Cost × 100%\n= (1400 − 1000) / 1000 × 100%\n= 400 / 1000 × 100%\n= 40%\n\nROI tells you how efficiently your money worked. 40% means you earned 40 cents for every dollar invested."},
+{id:44,cat:"Financial Math",hint:"Present Value (PV) answers: 'What is a future payment worth in today's dollars?'\n\nA dollar today is worth MORE than a dollar in the future (because today's dollar can grow).\n\nFormula: PV = FV / (1 + r)^t\nFV = $1,210\nr = 0.10\nt = 2 years\n\nPV = 1210 / (1.10)² = 1210 / 1.21 = $1,000",q:"What is the present value of $1,210 received in 2 years at a 10% discount rate?",opts:["$900","$1,000","$1,100","$1,210"],ans:1,exp:"PV = FV / (1 + r)^t\n= 1210 / (1 + 0.10)²\n= 1210 / (1.10)²\n= 1210 / 1.21\n= $1,000\n\nIntuition: if you invested $1,000 today at 10%, it would grow to $1,000 × 1.1 × 1.1 = $1,210 in 2 years."},
+{id:45,cat:"Financial Math",hint:"Break-even is where total revenue equals total costs — zero profit, zero loss.\n\nBreak-Even Units = Fixed Costs ÷ Contribution Margin\nContribution Margin = Price per unit − Variable cost per unit\n\nFixed Costs = $5,000\nPrice = $50, Variable Cost = $30\nContribution Margin = $50 − $30 = $20\n\nBreak-Even = $5,000 ÷ $20 = 250 units",q:"Fixed costs are $5,000. Each unit sells for $50 and has a variable cost of $30. How many units to break even?",opts:["100","167","250","500"],ans:2,exp:"Contribution Margin = Price − Variable Cost = 50 − 30 = $20 per unit\nBreak-Even = Fixed Costs ÷ Contribution Margin\n= $5,000 ÷ $20\n= 250 units\n\nAt 250 units: Revenue = 250×$50 = $12,500. Total Costs = $5,000 + 250×$30 = $12,500. ✓"},
+{id:46,cat:"Financial Math",hint:"Inflation erodes purchasing power — a dollar buys less over time.\n\nReal return = how much your investment actually grew after inflation is accounted for.\n\nApproximation: Real Return ≈ Nominal Return − Inflation Rate\n= 8% − 3% = 5%\n\n(Exact formula: (1.08/1.03) − 1 ≈ 4.85%, but 5% is the standard approximation.)",q:"An investment returns 8% nominally. Inflation is 3%. What is the approximate real return?",opts:["3%","5%","8%","11%"],ans:1,exp:"Real Return ≈ Nominal Return − Inflation Rate\n= 8% − 3%\n= 5%\n\nThe exact Fisher equation: (1 + real) = (1 + nominal)/(1 + inflation)\n= 1.08/1.03 ≈ 1.0485 → real ≈ 4.85%\n\nFor exam purposes, the approximation (8%−3%=5%) is standard."},
+{id:47,cat:"Financial Math",hint:"A loan payment covers both interest and repaying the principal. In a 'simple interest loan,' interest is based on the outstanding balance.\n\nStep 1: Calculate interest for the period → $5,000 × 0.04 = $200\nStep 2: Subtract interest from payment to find principal repaid → $800 − $200 = $600",q:"A loan of $5,000 at 4% annual interest. Monthly payment is $800. How much of the first payment goes to principal? (Use annual rate for simplicity)",opts:["$200","$600","$700","$800"],ans:1,exp:"Year 1 interest = $5,000 × 0.04 = $200\nPayment = $800\nPrincipal portion = $800 − $200 = $600\n\nThis is loan amortization: early payments are mostly interest; later payments are mostly principal as the balance shrinks."},
+{id:48,cat:"Financial Math",hint:"Compound growth applies the SAME growth rate repeatedly, each time on the new (larger) value.\n\nStart: $50,000\nYear 1: $50,000 × 1.07 = $53,500\nYear 2: $53,500 × 1.07 = $57,245\nYear 3: $57,245 × 1.07 ≈ $61,252\n\nOr use the formula: A = 50,000 × (1.07)³ ≈ $61,248",q:"A salary of $50,000 grows 7% per year for 3 years. What is the final salary?",opts:["$60,500","$61,248","$61,500","$62,000"],ans:1,exp:"A = P(1 + r)^t = 50,000 × (1.07)³\n(1.07)³ = 1.07 × 1.07 × 1.07 = 1.225043\n50,000 × 1.225 ≈ $61,248\n\nNote: Linear growth (7% of $50k = $3,500 × 3 = $10,500) would give $60,500. Compound growth is more because each year's base is larger."},
+{id:49,cat:"Financial Math",hint:"Price-to-Earnings (P/E) ratio shows how much investors pay per dollar of earnings.\n\nP/E = Stock Price ÷ Earnings Per Share\n\nStock Price = $45\nEPS = $3\n\nP/E = 45 ÷ 3 = 15\n\nA P/E of 15 means investors pay $15 for every $1 of earnings.",q:"A stock trades at $45 per share with earnings per share (EPS) of $3. What is the P/E ratio?",opts:["3","12","15","45"],ans:2,exp:"P/E Ratio = Price per Share ÷ Earnings per Share\n= $45 ÷ $3\n= 15\n\nA P/E of 15 is interpreted as: investors are willing to pay 15 times the annual earnings for one share. Higher P/E = higher growth expectations."},
+{id:50,cat:"Financial Math",hint:"An annuity is a series of equal payments at regular intervals. The present value formula finds what all those future payments are worth TODAY.\n\nPVA = PMT × [1 − (1+r)^(−n)] / r\n\nPMT = $1,000\nr = 0.05\nn = 3\n\n(1.05)^(−3) = 1/1.157625 ≈ 0.8638\n1 − 0.8638 = 0.1362\n0.1362 / 0.05 = 2.723\n$1,000 × 2.723 ≈ $2,723",q:"What is the present value of an annuity paying $1,000 per year for 3 years at 5% discount rate?",opts:["$2,500","$2,723","$3,000","$3,153"],ans:1,exp:"PV Annuity = PMT × [1 − (1+r)^(-n)] / r\n= 1000 × [1 − (1.05)^(-3)] / 0.05\n= 1000 × [1 − 0.8638] / 0.05\n= 1000 × 0.1362 / 0.05\n= 1000 × 2.723\n≈ $2,723\n\nThis means receiving $1,000/year for 3 years is worth the same as $2,723 today at 5%."},
+
+// ── RISK MODELING (10) ─────────────────────────────────────────────
+{id:51,cat:"Risk Modeling",hint:"Expected Value = multiply each outcome by its probability, then add everything up.\n\nE(X) = Σ[outcome × P(outcome)]\n\nProject A: $50,000 × 0.6 = $30,000\nProject B: $90,000 × 0.4 = $36,000\n\nNow add them for each project:\nA: 30,000 + ... wait, let me set it up right.\n\nProject A: $50k at 60% + $20k at 40% = 30,000 + 8,000 = $38,000\nProject B: $90k at 40% + $10k at 60% = 36,000 + 6,000 = $42,000",q:"Project A yields $50k (60% chance) or $20k (40%). Project B yields $90k (40%) or $10k (60%). Which has the higher expected value?",opts:["Project A with $38,000","Project B with $42,000","They are equal at $40,000","Project A with $50,000"],ans:1,exp:"E(A) = 50,000×0.6 + 20,000×0.4 = 30,000 + 8,000 = $38,000\nE(B) = 90,000×0.4 + 10,000×0.6 = 36,000 + 6,000 = $42,000\n\nProject B has higher EV ($42k > $38k), BUT it also has higher risk (40% chance of only $10k). A risk-averse decision-maker might still prefer A's more consistent $38k."},
+{id:52,cat:"Risk Modeling",hint:"Standard deviation measures how spread out the possible outcomes are from the expected value.\n\nHigh SD = outcomes vary a lot = more uncertainty = more risk.\nLow SD = outcomes cluster near the expected value = more predictable = less risk.\n\nAn investor comparing two investments with the same expected return should prefer the one with LOWER standard deviation.",q:"Two investments have the same expected return. Investment X has a standard deviation of 5%, Investment Y has SD of 15%. Which is less risky?",opts:["Investment X","Investment Y","They have equal risk","Cannot determine without more data"],ans:0,exp:"Standard deviation measures the variability of returns — how much the actual outcome could differ from the expected outcome.\n\nLower SD = less variability = less risk.\nInvestment X (SD=5%) is less risky than Y (SD=15%).\n\nThis is the core concept of the risk-return tradeoff: higher expected return often comes with higher SD (risk)."},
+{id:53,cat:"Risk Modeling",hint:"A risk matrix multiplies two things:\nProbability: how likely is the event?\nImpact: how bad is it if it happens?\n\nRisk Score = Probability × Impact\n\nEvent A: 0.8 × 2 = 1.6\nEvent B: 0.2 × 9 = 1.8\n\nCompare: 1.8 > 1.6, so Event B has higher risk SCORE even though it's less likely.",q:"Event A: P=0.8, Impact=2. Event B: P=0.2, Impact=9. Using a risk matrix, which has a higher risk score?",opts:["Event A","Event B","They are equal","Cannot be calculated"],ans:1,exp:"Risk Score = Probability × Impact\nEvent A: 0.8 × 2 = 1.6\nEvent B: 0.2 × 9 = 1.8\n\nEvent B has the higher risk score (1.8 > 1.6).\n\nImportant insight: low-probability, high-impact events (like Event B) are often underestimated. Risk matrices prevent this by forcing you to quantify both dimensions."},
+{id:54,cat:"Risk Modeling",hint:"The 68-95-99.7 rule (Empirical Rule) for normal distributions:\n\n68% of data falls within 1 SD of the mean\n95% falls within 2 SDs\n99.7% falls within 3 SDs\n\nMean = $100, SD = $10\n2 SDs above mean = $100 + 2×$10 = $120\n2 SDs below mean = $100 − 2×$10 = $80\n\nSo 95% of returns fall between $80 and $120.",q:"A portfolio has a mean daily return of $100 with SD of $10. Using the Empirical Rule, 95% of days yield between:",opts:["$90 and $110","$80 and $120","$70 and $130","$95 and $105"],ans:1,exp:"Empirical Rule: 95% of data falls within ±2 standard deviations.\nMean ± 2×SD = $100 ± 2×$10 = $100 ± $20\nRange: $80 to $120\n\nThis means on 95% of trading days, the portfolio earns between $80 and $120. On 5% of days, it falls outside this range."},
+{id:55,cat:"Risk Modeling",hint:"Value at Risk (VaR) is a risk measure that answers: 'What's the most I could lose, with X% confidence?'\n\nVaR of $50,000 at 95% confidence means:\n→ There is a 95% chance you will NOT lose more than $50,000\n→ Equivalently, there is a 5% chance you WILL lose more than $50,000",q:"A portfolio has a 95% VaR of $50,000. What does this mean?",opts:["You will lose exactly $50,000","There is a 5% chance of losing more than $50,000","You will never lose more than $50,000","Expected loss is $50,000"],ans:1,exp:"VaR (Value at Risk): With 95% confidence, losses will NOT exceed $50,000.\nIn other words: there is a 5% chance losses WILL exceed $50,000.\n\nVaR is widely used in finance but has a limitation: it says nothing about HOW BAD losses could be beyond the threshold. That's what CVaR (Conditional VaR) addresses."},
+{id:56,cat:"Risk Modeling",hint:"Correlation between assets affects portfolio risk.\n\nIf two assets are positively correlated, they move TOGETHER — when one loses, the other likely loses too. No real protection!\n\nIf two assets are NEGATIVELY correlated, when one falls, the other tends to rise — they offset each other.\n\nLow or negative correlation = better diversification = lower portfolio risk.",q:"A portfolio holds two assets. One has correlation of −0.8 with the other. What does this mean for risk?",opts:["Increased risk since they move opposite","Reduced risk — they tend to offset each other","No effect on risk","Risk doubles"],ans:1,exp:"Correlation of −0.8 (strong negative) means: when one asset loses value, the other tends to gain.\n\nThis is the principle of diversification — combining assets that don't move together reduces overall portfolio volatility (risk).\n\nCorrelation of +1 = move exactly together (no diversification benefit)\nCorrelation of −1 = move exactly opposite (maximum diversification)"},
+{id:57,cat:"Risk Modeling",hint:"Monte Carlo simulation works by running thousands of random 'what-if' scenarios.\n\nInstead of trying to solve a complex equation, you:\n1. Define the random inputs (like market returns)\n2. Run thousands of simulations with random values\n3. See how often each outcome occurs\n\nThe result is a probability distribution of outcomes.",q:"What is the primary purpose of Monte Carlo simulation in risk modeling?",opts:["To find the exact future value of an investment","To estimate the probability distribution of outcomes","To eliminate all uncertainty from forecasts","To calculate interest rates"],ans:1,exp:"Monte Carlo simulation runs thousands of random scenarios to build a picture of all possible outcomes and their likelihoods.\n\nFor example: 'What's the probability this project makes money?' — you run 10,000 simulations with random market conditions and see how many result in profit.\n\nIt handles complex systems where exact math is too difficult."},
+{id:58,cat:"Risk Modeling",hint:"Beta measures how sensitive a stock is to market movements.\n\nBeta = 1.0 → stock moves exactly with the market\nBeta > 1.0 → more volatile than the market (amplified moves)\nBeta < 1.0 → less volatile than the market\n\nBeta = 1.5 means: if the market rises 10%, the stock tends to rise 15%. If market falls 10%, stock falls 15%.",q:"A stock has a beta of 1.5. The market rises 10%. What is the stock's expected move?",opts:["5%","10%","15%","20%"],ans:2,exp:"Beta × Market Move = Expected Stock Move\n1.5 × 10% = 15%\n\nBeta is a measure of systematic risk — how much of the market's movement a stock tends to amplify or dampen.\n\nHigh beta stocks (>1) are riskier but offer higher potential returns in bull markets. Low beta stocks (<1) are more stable."},
+{id:59,cat:"Risk Modeling",hint:"Bayes' theorem is used to UPDATE a probability when new information arrives.\n\nP(A|B) = P(B|A) × P(A) / P(B)\n\nWe're told:\nP(Fraud) = 0.01\nP(Alert | Fraud) = 0.90\nP(Alert | No Fraud) = 0.05\n\nFirst find P(Alert): 0.90×0.01 + 0.05×0.99 = 0.009 + 0.0495 = 0.0585\nP(Fraud | Alert) = (0.90 × 0.01) / 0.0585 = 0.009/0.0585 ≈ 0.154",q:"P(Fraud)=0.01, P(Alert|Fraud)=0.90, P(Alert|No Fraud)=0.05. Find P(Fraud|Alert).",opts:["90%","50%","15.4%","1%"],ans:2,exp:"Bayes' Theorem: P(Fraud|Alert) = P(Alert|Fraud)×P(Fraud) / P(Alert)\nP(Alert) = P(Alert|Fraud)×P(Fraud) + P(Alert|No Fraud)×P(No Fraud)\n= 0.90×0.01 + 0.05×0.99\n= 0.009 + 0.0495 = 0.0585\nP(Fraud|Alert) = 0.009/0.0585 ≈ 0.154 = 15.4%\n\nDespite the alert, only 15.4% chance of actual fraud — because fraud is rare. This is why fraud systems generate many false positives."},
+{id:60,cat:"Risk Modeling",hint:"The Sharpe Ratio measures how much RETURN you get per unit of RISK.\n\nFormula: Sharpe = (Return − Risk-Free Rate) / Standard Deviation\n\nReturn = 12%\nRisk-Free Rate = 2% (like a Treasury bond)\nSD = 8%\n\nSharpe = (12% − 2%) / 8% = 10% / 8% = 1.25",q:"A portfolio returns 12%, risk-free rate is 2%, and SD is 8%. What is the Sharpe Ratio?",opts:["0.80","1.00","1.25","1.50"],ans:2,exp:"Sharpe Ratio = (Return − Risk-Free Rate) / Standard Deviation\n= (12% − 2%) / 8%\n= 10% / 8%\n= 1.25\n\nHigher Sharpe = better risk-adjusted performance. A ratio above 1.0 is generally considered good. It tells you how much excess return you earn for each unit of risk taken."}
+];
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+const FLASHCARDS = [
+// GENERAL MATH
+{cat:"General Math",q:"What is PEMDAS?",a:"P – Parentheses (solve inside first)\nE – Exponents (powers and roots)\nM/D – Multiply & Divide (left to right)\nA/S – Add & Subtract (left to right)\n\nExample: 2×(3+4)−5\nStep 1: 3+4=7 (parentheses)\nStep 2: 2×7=14 (multiply)\nStep 3: 14−5=9 (subtract)"},
+{cat:"General Math",q:"How do you find what percent one number is of another?",a:"Formula: Part ÷ Whole × 100 = %\n\nExample: 'What % is 18 of 72?'\nStep 1: 18 ÷ 72 = 0.25\nStep 2: 0.25 × 100 = 25%\n\nTip: Think of it as 'What fraction of the whole is the part?' then convert that fraction to percent."},
+{cat:"General Math",q:"How do you calculate a percentage increase?",a:"Formula: (New − Old) ÷ Old × 100\n\nExample: Price goes from $80 to $100\nStep 1: 100 − 80 = 20 (the increase)\nStep 2: 20 ÷ 80 = 0.25 (as a decimal)\nStep 3: 0.25 × 100 = 25% increase\n\nKey: always divide by the OLD (original) number, not the new one!"},
+{cat:"General Math",q:"What is absolute value and how is it used?",a:"Absolute value = distance from zero on a number line. Always positive.\n\n|−7| = 7\n|4| = 4\n|0| = 0\n\nThink of it as 'removing the negative sign.' Both −7 and +7 are the same distance (7) from zero."},
+{cat:"General Math",q:"What is the LCM and how do you find it?",a:"LCM = Least Common Multiple = the smallest number both values divide into evenly.\n\nExample: LCM of 4 and 6?\nMultiples of 4: 4, 8, 12, 16...\nMultiples of 6: 6, 12, 18...\nFirst shared value: 12\n\nUsed for adding fractions with different denominators."},
+// ALGEBRA
+{cat:"Algebra",q:"How do you solve a linear equation step-by-step?",a:"Goal: get the variable alone on one side.\nDo the SAME operation to BOTH sides.\n\nExample: 4x − 3 = 17\nStep 1: Add 3 to both sides → 4x = 20\nStep 2: Divide both sides by 4 → x = 5\nStep 3: Check! 4(5)−3 = 17 ✓\n\nUndo in reverse order: undo subtraction first, then undo multiplication."},
+{cat:"Algebra",q:"What is the quadratic formula and when do you use it?",a:"x = (−b ± √(b²−4ac)) / 2a\nUse when: ax² + bx + c = 0\n\nExample: x²−5x+6=0 → a=1, b=−5, c=6\nStep 1: Discriminant = (−5)²−4(1)(6) = 25−24 = 1\nStep 2: √1 = 1\nStep 3: x = (5±1)/2 → x=3 or x=2\n\nDiscriminant > 0: two solutions. = 0: one solution. < 0: no real solutions."},
+{cat:"Algebra",q:"How do you find the slope between two points?",a:"Slope (m) = rise ÷ run = (y₂−y₁) ÷ (x₂−x₁)\n\nExample: Points (1,3) and (4,9)\nStep 1: Rise = 9−3 = 6\nStep 2: Run = 4−1 = 3\nStep 3: Slope = 6÷3 = 2\n\nSlope of 2 means: go right 1 unit, go up 2 units. Positive slope = line goes up from left to right."},
+{cat:"Algebra",q:"What are the exponent rules?",a:"Same base multiplication: xᵃ × xᵇ = x^(a+b)\nSame base division: xᵃ ÷ xᵇ = x^(a−b)\nPower of a power: (xᵃ)ᵇ = x^(ab)\nZero exponent: x⁰ = 1\nNegative exponent: x⁻ⁿ = 1/xⁿ\n\nExample: x³ × x⁴ = x⁷ (add the exponents because we're counting how many x's we have)"},
+{cat:"Algebra",q:"What is the FOIL method and how does it work?",a:"FOIL = First, Outside, Inside, Last\nUsed to multiply two binomials.\n\n(x+3)(x+5):\nFirst: x × x = x²\nOutside: x × 5 = 5x\nInside: 3 × x = 3x\nLast: 3 × 5 = 15\n\nCombine: x² + 5x + 3x + 15 = x² + 8x + 15\n\nTip: (a+b)² = a² + 2ab + b² (the middle term is always 2ab)"},
+// PROBABILITY
+{cat:"Probability",q:"How do you calculate basic probability step-by-step?",a:"P(event) = Favorable outcomes ÷ Total outcomes\n\nExample: Rolling a number > 4 on a die\nFavorable: {5, 6} = 2 outcomes\nTotal: {1,2,3,4,5,6} = 6 outcomes\nP = 2/6 = 1/3\n\nAlways: count what you WANT, divide by ALL possible outcomes. Result is always between 0 (impossible) and 1 (certain)."},
+{cat:"Probability",q:"When do you MULTIPLY probabilities vs. ADD them?",a:"MULTIPLY (AND rule): when BOTH events must happen\n→ Independent events: P(A and B) = P(A) × P(B)\n→ Example: P(heads AND heads) = ½ × ½ = ¼\n\nADD (OR rule): when EITHER event can happen\n→ Mutually exclusive: P(A or B) = P(A) + P(B)\n→ Example: P(1 or 2 on die) = 1/6 + 1/6 = 1/3\n\nKey question: 'both?' = multiply. 'either?' = add."},
+{cat:"Probability",q:"What is the complement rule and why is it useful?",a:"P(not A) = 1 − P(A)\n\nAll probabilities must add up to 1 (something must happen).\n\nExample: P(at least one heads in 3 flips)\nInstead of complex calculation, use complement:\nP(at least one heads) = 1 − P(no heads at all)\n= 1 − (½)³ = 1 − 1/8 = 7/8\n\nUse it whenever 'at least one' or 'not' appears — it's almost always easier!"},
+{cat:"Probability",q:"Permutations vs. Combinations — what's the difference?",a:"Permutations: ORDER MATTERS → use when positions matter\nnPr = n! / (n−r)!\nExample: 3 medals from 10 runners → 10×9×8 = 720\n\nCombinations: ORDER DOESN'T MATTER → use when only membership matters\nnCr = n! / (r!(n−r)!)\nExample: Pick 3 people from 10 → 10C3 = 120\n\nKey question: Does swapping the order create a DIFFERENT outcome? Yes=permutation. No=combination."},
+{cat:"Probability",q:"What is expected value and how do you calculate it?",a:"Expected Value (EV) = the average outcome over many trials.\nE(X) = sum of (each outcome × its probability)\n\nExample: Lottery — $0 (90% chance) or $100 (10% chance)\nStep 1: $0 × 0.9 = $0\nStep 2: $100 × 0.1 = $10\nStep 3: EV = $0 + $10 = $10\n\nYou'd expect to average $10 per ticket over many plays. If a ticket costs $15, it's a bad deal (EV < cost)."},
+// STATISTICS
+{cat:"Statistics",q:"Mean, Median, Mode — when do you use each?",a:"MEAN: average. Use when data has no extreme outliers.\nFormula: Sum ÷ Count\n\nMEDIAN: middle value (sort first!). Use when outliers exist (e.g., housing prices).\nFormula: Middle value after sorting.\n\nMODE: most frequent. Use for categorical data (favorite color, etc.).\n\nExample: {1, 2, 3, 100}\nMean = 26.5 (pulled high by 100)\nMedian = 2.5 (unaffected by 100)"},
+{cat:"Statistics",q:"How do you calculate standard deviation step-by-step?",a:"Standard deviation measures spread from the mean.\n\nStep 1: Find the mean\nStep 2: Subtract the mean from each value, then square the result\nStep 3: Average those squared differences → this is VARIANCE\nStep 4: Take the square root of variance → STANDARD DEVIATION\n\nExample: {2, 4, 4, 4, 5, 5, 7, 9}\nMean = 5\nVariances: 9,1,1,1,0,0,4,16 → avg = 4\nSD = √4 = 2"},
+{cat:"Statistics",q:"What is a z-score and what does it tell you?",a:"Z-score = (value − mean) / standard deviation\nTells you: how many standard deviations above or below the mean a value is.\n\nExample: test mean=70, SD=10, you scored 85\nZ = (85−70)/10 = 1.5\n\nMeaning: your score is 1.5 SDs above average.\n\nZ=0: exactly average\nZ=+1: 1 SD above (better than ~84%)\nZ=−2: 2 SDs below (below ~97.7%)"},
+{cat:"Statistics",q:"What is the Empirical Rule (68-95-99.7 Rule)?",a:"For a normal (bell curve) distribution:\n\n68% of data falls within ±1 SD of mean\n95% falls within ±2 SD\n99.7% falls within ±3 SD\n\nExample: Heights, mean=170cm, SD=8cm\n68%: between 162−178cm (±8)\n95%: between 154−186cm (±16)\n99.7%: between 146−194cm (±24)\n\nUse this to quickly judge if a value is unusual: outside 2 SDs = only 5% of data."},
+{cat:"Statistics",q:"What is the difference between correlation and causation?",a:"CORRELATION: two variables tend to change together.\n→ Can be measured with the correlation coefficient (r), ranges −1 to +1.\n\nCAUSATION: one variable actually CAUSES changes in the other.\n→ Can only be established through controlled experiments.\n\nFamous example: Cities with more ice cream sales have more drownings. Correlated! But ice cream doesn't cause drowning — hot weather causes both.\n\nCorrelation describes relationship. Causation requires proof of mechanism."},
+// FINANCIAL MATH
+{cat:"Financial Math",q:"Simple interest vs. compound interest — what's the difference?",a:"SIMPLE INTEREST: interest is always calculated on the original principal only.\nI = P × r × t\nExample: $1000 at 5% for 3 years = $1000×0.05×3 = $150 interest\n\nCOMPOUND INTEREST: interest is calculated on principal PLUS previously earned interest.\nA = P(1+r)^t\nExample: $1000 at 5% for 3 years = $1000×(1.05)³ = $1,157.63\n\nDifference: $7.63 — small now, huge over decades!"},
+{cat:"Financial Math",q:"How do you calculate Present Value step-by-step?",a:"Present Value (PV) = what a future amount is worth TODAY.\n\nFormula: PV = FV / (1+r)^t\n\nExample: 'What is $1,210 in 2 years worth today at 10%?'\nStep 1: (1+0.10)² = 1.21\nStep 2: PV = 1,210 / 1.21 = $1,000\n\nLogic: if you invested $1,000 today at 10%, it would become $1,210 in 2 years. So they're equivalent values at different points in time."},
+{cat:"Financial Math",q:"How do you calculate break-even point?",a:"Break-Even = the number of units where revenue = total costs (zero profit).\n\nFormula: Break-Even Units = Fixed Costs ÷ Contribution Margin\nContribution Margin = Selling Price − Variable Cost per unit\n\nExample: Fixed costs $10,000, Price $25, Variable cost $15\nContribution Margin = $25 − $15 = $10\nBreak-Even = $10,000 ÷ $10 = 1,000 units\n\nVerify: 1000×$25=$25,000 revenue; $10,000+1000×$15=$25,000 costs ✓"},
+{cat:"Financial Math",q:"What is ROI and how is it calculated?",a:"ROI = Return on Investment = how efficient was your investment?\n\nFormula: ROI = (Gain − Cost) / Cost × 100%\n\nExample: Invest $500, earn $750\nStep 1: Gain = $750 − $500 = $250\nStep 2: $250 ÷ $500 = 0.5\nStep 3: 0.5 × 100 = 50% ROI\n\nROI of 50% means: for every dollar you put in, you got back $1.50 total ($0.50 profit)."},
+{cat:"Financial Math",q:"What is the time value of money?",a:"Core concept: A dollar TODAY is worth more than a dollar in the FUTURE.\n\nWhy? Because today's dollar can be invested and grow.\n\nThis is why:\n→ We use Present Value to 'discount' future cash flows\n→ Compound interest makes money grow over time\n→ Inflation makes future dollars worth less\n\nFormula connection:\nFuture Value = PV × (1+r)^t (growing forward)\nPresent Value = FV / (1+r)^t (discounting back)"},
+// RISK MODELING
+{cat:"Risk Modeling",q:"What is Expected Value and how does it apply to risk?",a:"EV = the long-run average outcome of a repeated decision.\nE(X) = Σ[outcome × probability]\n\nExample: Insurance decision\n→ Pay $200/year premium\n→ Without insurance: 2% chance of $5,000 loss\nEV of loss = $5,000 × 0.02 = $100\n\nThe EV of the loss ($100) < premium ($200).\nInsurance company profits on average, but you buy peace of mind.\n\nRisk-averse people pay MORE than EV to avoid uncertainty."},
+{cat:"Risk Modeling",q:"What is a risk matrix and how do you use it?",a:"A risk matrix scores risks by: Risk = Probability × Impact\n\nStep 1: List all potential risks\nStep 2: Rate each on Probability (e.g., 1-5 scale)\nStep 3: Rate each on Impact (e.g., 1-5 scale)\nStep 4: Multiply → Risk Score\n\nExample:\nRisk A: P=4, Impact=2 → Score=8\nRisk B: P=1, Impact=5 → Score=5\nPrioritize Risk A even though B is more severe — it's much more likely.\n\nHigh-score risks get mitigation plans first."},
+{cat:"Risk Modeling",q:"What does standard deviation tell us about risk?",a:"Standard deviation (SD) measures the SPREAD of outcomes — how much the actual result might differ from the expected value.\n\nIn risk/finance:\nHigh SD = outcomes are unpredictable = high risk\nLow SD = outcomes are consistent = low risk\n\nExample: Two funds, both return 8% average\nFund A: SD=2% (returns range roughly 6%–10%)\nFund B: SD=20% (returns range roughly −12% to +28%)\n\nFund A is less risky even at the same return!"},
+{cat:"Risk Modeling",q:"How does Bayes' Theorem update probabilities?",a:"Bayes: P(A|B) = P(B|A) × P(A) / P(B)\nMeaning: 'Update your belief in A after seeing evidence B'\n\nStep 1: Start with your prior probability P(A)\nStep 2: Consider how likely the evidence B is if A is true\nStep 3: Update using the formula\n\nExample: Medical test is 95% accurate, disease affects 1%\n→ Positive test only means ~16% chance you have it!\n→ Why? Because false positives swamp true positives when disease is rare.\n\nKey lesson: always consider the base rate!"},
+{cat:"Risk Modeling",q:"What is diversification and why does it reduce risk?",a:"Diversification = spreading investments across assets that don't all move together.\n\nWhy it works: assets with low or negative correlation offset each other.\n\nExample: Stocks + Bonds\n→ Stocks rise when economy is strong\n→ Bonds rise when economy weakens\n→ Correlation is negative → one helps when the other hurts\n\nFormula insight: Portfolio risk (SD) < weighted average of individual SDs when correlation < 1.\n\nKey rule: diversification reduces UNSYSTEMATIC risk, not market-wide (systematic) risk."}
+];
+
+// ── APP STATE ──────────────────────────────────────────────────────
+let mode='practice',sessionQuestions=[],currentIndex=0,score=0,streak=0,flagged=new Set(),wrongAnswers=[],usedFirst=false,timerInterval=null,elapsedSeconds=0,categoryStats={},TOTAL_PER_SESSION=10,previousScreen='home',fcIndex=0,fcKnew=0,fcMissed=0,fcQuestions=[],fcFlipped=false,currentUtterance=null,speakingTarget=null,hintUsed=false,fcMissedCards=[];
+
+function getHistory(){try{return JSON.parse(localStorage.getItem('mathHistory')||'[]');}catch(e){return[];}}
+function saveSession(pct){const h=getHistory();h.push({pct,date:Date.now()});if(h.length>20)h.splice(0,h.length-20);try{localStorage.setItem('mathHistory',JSON.stringify(h));}catch(e){}}
+function renderHomeProgress(){const h=getHistory();const wrap=document.getElementById('hp-bars-wrap');const statsEl=document.getElementById('hp-stats');if(h.length===0){wrap.innerHTML='<div class="hp-empty-msg">No sessions yet — start your first test!</div>';statsEl.style.display='none';return;}const last5=h.slice(-5);let barsHtml='<div class="hp-bars">';last5.forEach(s=>{const col=s.pct>=70?'var(--green)':s.pct>=50?'var(--accent)':'var(--red)';barsHtml+=`<div class="hp-bar-wrap"><div class="hp-bar" style="height:${s.pct}%;background:${col}"></div><div class="hp-score">${s.pct}%</div></div>`;});for(let i=last5.length;i<5;i++){barsHtml+='<div class="hp-bar-wrap"><div class="hp-bar empty" style="height:4px"></div><div class="hp-score">—</div></div>';}barsHtml+='</div>';wrap.innerHTML=barsHtml;const all=h.map(s=>s.pct);const best=Math.max(...all);const avg=Math.round(all.reduce((a,b)=>a+b,0)/all.length);document.getElementById('hp-best').textContent=best+'%';document.getElementById('hp-avg').textContent=avg+'%';document.getElementById('hp-sessions').textContent=h.length;statsEl.style.display='flex';}
+function getCategoryHistory(){try{return JSON.parse(localStorage.getItem('mathCatHistory')||'{}');}catch(e){return{};}}
+function saveCategoryStats(stats){const existing=getCategoryHistory();Object.entries(stats).forEach(([cat,s])=>{if(!existing[cat])existing[cat]={correct:0,total:0};existing[cat].correct+=s.correct;existing[cat].total+=s.total;});try{localStorage.setItem('mathCatHistory',JSON.stringify(existing));}catch(e){}}
+function checkDrillAvailability(){const h=getHistory();const drillBtn=document.getElementById('drill-btn');const drillMsg=document.getElementById('drill-unavail');if(h.length<2){drillBtn.style.opacity='0.5';drillMsg.style.display='block';}else{drillBtn.style.opacity='1';drillMsg.style.display='none';}}
+
+const ALL_CATS=["General Math","Algebra","Probability","Statistics","Financial Math","Risk Modeling"];
+let selectedCats=[];let pendingMode='practice';
+
+function openCatPicker(selectedMode){pendingMode=selectedMode;selectedCats=[];renderCatGrid();showScreen('cat-pick');}
+function renderCatGrid(){const grid=document.getElementById('cat-grid');grid.innerHTML='';ALL_CATS.forEach(cat=>{const btn=document.createElement('button');btn.className='cat-pill-btn'+(selectedCats.includes(cat)?' selected':'');btn.textContent=cat;btn.onclick=()=>toggleCat(cat);grid.appendChild(btn);});updateCatLabel();}
+function toggleCat(cat){if(selectedCats.includes(cat)){selectedCats=selectedCats.filter(c=>c!==cat);}else{selectedCats.push(cat);}renderCatGrid();}
+function updateCatLabel(){const label=document.getElementById('cat-selected-label');const btn=document.getElementById('cat-start-btn');const n=selectedCats.length;label.textContent=n===0?'No categories selected — tap to choose':n+' categor'+(n===1?'y':'ies')+' selected';btn.disabled=n===0;}
+function startWithAllCats(){selectedCats=[...ALL_CATS];launchWithCats();}
+function startWithSelectedCats(){if(selectedCats.length===0)return;launchWithCats();}
+function launchWithCats(){if(pendingMode==='drill'){startDrill(selectedCats);return;}const pool=QUESTIONS.filter(q=>selectedCats.includes(q.cat));if(pool.length===0)return;const seen=getSeenQuestions();const unseen=pool.filter(q=>!seen.includes(q.id)).sort(()=>Math.random()-0.5);const seenQs=pool.filter(q=>seen.includes(q.id)).sort(()=>Math.random()-0.5);const sorted=[...unseen,...seenQs];const selected=sorted.slice(0,Math.min(TOTAL_PER_SESSION,sorted.length));mode=pendingMode;launchQuiz(selected);}
+
+function switchTab(tab){document.querySelectorAll('.fs-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.fs-panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');document.getElementById('panel-'+tab).classList.add('active');}
+function openSheet(tab){const activeEl=document.querySelector('.screen.active');previousScreen=activeEl?activeEl.id:'home';showScreen('formula-sheet');switchTab(tab||'formulas');}
+
+function getSeenQuestions(){try{return JSON.parse(localStorage.getItem('mathSeen')||'[]');}catch(e){return[];}}
+function markQuestionsSeen(ids){let seen=getSeenQuestions();ids.forEach(id=>{if(!seen.includes(id))seen.push(id);});if(seen.length>100)seen=seen.slice(seen.length-100);try{localStorage.setItem('mathSeen',JSON.stringify(seen));}catch(e){}}
+
+function startDrill(catFilter){const h=getHistory();if(h.length<2)return;const catH=getCategoryHistory();const weakCats=Object.entries(catH).filter(([,s])=>s.total>0&&(s.correct/s.total)<0.70).map(([cat])=>cat);const source=catFilter?QUESTIONS.filter(q=>catFilter.includes(q.cat)):QUESTIONS;let pool=[];source.forEach(q=>{if(weakCats.includes(q.cat)){pool.push(q);pool.push(q);pool.push(q);}else pool.push(q);});pool=pool.sort(()=>Math.random()-0.5);const seen=new Set();const deduped=[];for(const q of pool){if(!seen.has(q.id)){seen.add(q.id);deduped.push(q);}if(deduped.length>=TOTAL_PER_SESSION)break;}mode='drill';launchQuiz(deduped);}
+function showScreen(id){stopSpeaking();document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);el.classList.add('active');window.scrollTo(0,0);if(id==='home'){renderHomeProgress();checkDrillAvailability();}}
+function goBackFromFormula(){showScreen(previousScreen);}
+function setCount(n,el){TOTAL_PER_SESSION=n;document.querySelectorAll('.q-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function launchQuiz(questions){currentIndex=0;score=0;streak=0;flagged.clear();wrongAnswers=[];usedFirst=false;hintUsed=false;elapsedSeconds=0;categoryStats={};stopSpeaking();sessionQuestions=questions;sessionQuestions.forEach(q=>{if(!categoryStats[q.cat])categoryStats[q.cat]={correct:0,total:0};categoryStats[q.cat].total++;});const badge=document.getElementById('mode-badge');badge.textContent=mode==='practice'?'Practice':mode==='exam'?'Exam':mode==='drill'?'Drill':'Quiz';badge.className='quiz-mode-badge '+mode;document.querySelector('.progress-fill').style.background=mode==='practice'?'var(--green)':mode==='drill'?'var(--red)':'var(--accent)';clearInterval(timerInterval);const timerEl=document.getElementById('timer-display');if(mode==='exam'||mode==='drill'){timerEl.style.display='block';updateTimerDisplay();timerInterval=setInterval(()=>{elapsedSeconds++;updateTimerDisplay();},1000);}else{timerEl.style.display='none';}document.getElementById('streak-badge').className='streak-badge';showScreen('quiz');renderQuestion();}
+function updateTimerDisplay(){const m=Math.floor(elapsedSeconds/60),s=elapsedSeconds%60;document.getElementById('timer-display').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+function tapOut(){stopSpeaking();document.getElementById('tapout-count').textContent=currentIndex;document.getElementById('tapout-modal').style.display='flex';}
+function closeTapOut(){document.getElementById('tapout-modal').style.display='none';}
+function confirmTapOut(){document.getElementById('tapout-modal').style.display='none';finishQuiz(currentIndex);}
+function useHint(){if(hintUsed)return;const q=sessionQuestions[currentIndex];if(!q.hint)return;hintUsed=true;document.getElementById('hint-text').textContent=q.hint;document.getElementById('hint-box').classList.add('visible');const hadStreak=streak>0;streak=0;updateStreak();const btn=document.getElementById('btn-hint');btn.classList.add('used');btn.disabled=true;btn.textContent='💡 Hint Used';document.getElementById('streak-cost-msg').textContent=hadStreak?'⚠️ Streak reset — hints have a cost!':'';}
+function stopSpeaking(){if(window.speechSynthesis)window.speechSynthesis.cancel();currentUtterance=null;speakingTarget=null;document.querySelectorAll('.tts-btn').forEach(b=>b.classList.remove('speaking'));}
+function speak(text,targetId){if(!window.speechSynthesis)return;if(speakingTarget===targetId&&window.speechSynthesis.speaking){stopSpeaking();return;}stopSpeaking();speakingTarget=targetId;const btn=document.getElementById(targetId);if(btn)btn.classList.add('speaking');const u=new SpeechSynthesisUtterance(text);u.rate=0.9;u.pitch=1.0;u.volume=1.0;u.onend=u.onerror=()=>{if(btn)btn.classList.remove('speaking');speakingTarget=null;};currentUtterance=u;window.speechSynthesis.speak(u);}
+function speakQuestion(){const q=sessionQuestions[currentIndex];const letters=['A','B','C','D'];const optBtns=document.querySelectorAll('.option-btn');let optText='';optBtns.forEach((b,i)=>{optText+=`. Option ${letters[i]}: ${b.querySelector('span:last-child').textContent}`;});speak(`Question: ${q.q}${optText}`,'tts-q-btn');}
+function speakExplanation(){speak(document.getElementById('feedback-text').textContent,'tts-exp-btn');}
+function renderQuestion(){stopSpeaking();const q=sessionQuestions[currentIndex];usedFirst=false;hintUsed=false;document.getElementById('q-category').textContent=q.cat;document.getElementById('q-text').textContent=q.q;const pct=(currentIndex/TOTAL_PER_SESSION)*100;document.getElementById('progress-fill').style.width=pct+'%';document.getElementById('quiz-counter').textContent=`Q ${currentIndex+1} / ${TOTAL_PER_SESSION}`;document.getElementById('flag-btn').className='flag-btn'+(flagged.has(currentIndex)?' flagged':'');document.getElementById('feedback-box').className='feedback-box';document.getElementById('tts-exp-btn').style.display='none';const hintBox=document.getElementById('hint-box');hintBox.classList.remove('visible');document.getElementById('hint-text').textContent='';document.getElementById('streak-cost-msg').textContent='';const actionRow=document.getElementById('quiz-action-row');const hintBtn=document.getElementById('btn-hint');if(mode==='practice'||mode==='drill'){actionRow.style.display='flex';hintBtn.style.display='flex';hintBtn.classList.remove('used');hintBtn.disabled=false;hintBtn.textContent='💡 Hint';if(!q.hint){hintBtn.disabled=true;hintBtn.style.opacity='0.3';}else{hintBtn.style.opacity='';}}else{actionRow.style.display='flex';hintBtn.style.display='none';}const nextBtn=document.getElementById('btn-next');nextBtn.className='btn-next'+(mode==='practice'?' practice-style':mode==='drill'?' drill-style':'');nextBtn.textContent=currentIndex===TOTAL_PER_SESSION-1?'Finish →':'Next →';const letters=['A','B','C','D'];const opts=q.opts.map((text,i)=>({text,isCorrect:i===q.ans}));const shuffled=opts.sort(()=>Math.random()-0.5);const list=document.getElementById('options-list');list.innerHTML='';shuffled.forEach((opt,i)=>{const btn=document.createElement('button');btn.className='option-btn';btn.innerHTML=`<span class="option-letter">${letters[i]}</span><span>${opt.text}</span>`;btn.onclick=()=>selectOption(btn,opt.isCorrect,q);list.appendChild(btn);});}
+function selectOption(btn,isCorrect,q){if(mode==='practice'||mode==='drill')handlePracticeAnswer(btn,isCorrect,q);else handleExamAnswer(btn,isCorrect,q);}
+function handlePracticeAnswer(btn,isCorrect,q){if(isCorrect){btn.classList.add('correct');disableOptions();if(!usedFirst){score++;streak++;categoryStats[q.cat].correct++;}else{streak=0;}updateStreak();showFeedback(true,q.exp);document.getElementById('btn-next').classList.add('visible');}else{if(!usedFirst){usedFirst=true;btn.classList.add('selected-wrong');setTimeout(()=>btn.classList.remove('selected-wrong'),400);btn.disabled=true;streak=0;updateStreak();wrongAnswers.push({q,userAns:btn.querySelector('span:last-child').textContent});}else{btn.classList.add('selected-wrong');disableOptions();highlightCorrect();showFeedback(false,q.exp);document.getElementById('btn-next').classList.add('visible');}}}
+function handleExamAnswer(btn,isCorrect,q){const userAns=btn.querySelector('span:last-child').textContent;disableOptions();btn.style.opacity='.65';if(isCorrect){score++;categoryStats[q.cat].correct++;}else wrongAnswers.push({q,userAns});document.getElementById('btn-next').classList.add('visible');}
+function disableOptions(){document.querySelectorAll('.option-btn').forEach(b=>b.disabled=true);}
+function highlightCorrect(){document.querySelectorAll('.option-btn').forEach(btn=>{const q=sessionQuestions[currentIndex];if(btn.querySelector('span:last-child').textContent===q.opts[q.ans])btn.classList.add('correct');});}
+function showFeedback(isCorrect,explanation){const box=document.getElementById('feedback-box'),title=document.getElementById('feedback-title'),text=document.getElementById('feedback-text');box.className='feedback-box '+(isCorrect?'correct-fb':'wrong-fb');title.textContent=isCorrect?(usedFirst?'✓ Correct on 2nd try':'✓ Correct!'):'✗ Incorrect';text.textContent=explanation;if(mode==='practice'||mode==='drill')document.getElementById('tts-exp-btn').style.display='flex';}
+function updateStreak(){const el=document.getElementById('streak-badge');if((mode==='practice'||mode==='drill')&&streak>=3){el.textContent=`🔥 ${streak}`;el.className='streak-badge visible';}else el.className='streak-badge';}
+function toggleFlag(){const btn=document.getElementById('flag-btn');if(flagged.has(currentIndex)){flagged.delete(currentIndex);btn.className='flag-btn';}else{flagged.add(currentIndex);btn.className='flag-btn flagged';}}
+function nextQuestion(){stopSpeaking();currentIndex++;if(currentIndex>=TOTAL_PER_SESSION)finishQuiz(TOTAL_PER_SESSION);else{renderQuestion();window.scrollTo(0,0);}}
+function finishQuiz(answered){clearInterval(timerInterval);stopSpeaking();markQuestionsSeen(sessionQuestions.map(q=>q.id));const pct=answered>0?Math.round((score/answered)*100):0;const pass=pct>=70;saveSession(pct);saveCategoryStats(categoryStats);document.getElementById('score-fraction').textContent=`${score}/${answered}`;document.getElementById('score-pct').textContent=`${pct}%`;document.getElementById('score-ring').className='results-score-ring '+(pass?'pass':'fail');const v=document.getElementById('results-verdict');v.textContent=pass?'🎉 Great Work!':'📚 Keep Practicing';v.className='results-verdict '+(pass?'pass':'fail');let msg=pass?`You scored ${pct}% — solid performance!`:`You scored ${pct}%. Review your weak topics below.`;if(mode==='exam'||mode==='drill'){const m=Math.floor(elapsedSeconds/60),s=elapsedSeconds%60;msg+=` Time: ${m}m ${s}s.`;}if(answered<TOTAL_PER_SESSION)msg+=` (Ended after ${answered} questions.)`;document.getElementById('results-sub').textContent=msg;const breakdownEl=document.getElementById('breakdown-rows');breakdownEl.innerHTML='';Object.entries(categoryStats).forEach(([cat,stat])=>{if(stat.total===0)return;const p=stat.total>0?(stat.correct/stat.total)*100:0;const col=p>=80?'#00c853':p>=60?'#00e5ff':'#ff3d3d';const row=document.createElement('div');row.className='breakdown-row';row.innerHTML=`<div class="breakdown-cat">${cat}</div><div class="breakdown-bar-wrap"><div class="breakdown-bar" style="width:${p}%;background:${col}"></div></div><div class="breakdown-frac" style="color:${col}">${stat.correct}/${stat.total}</div>`;breakdownEl.appendChild(row);});document.getElementById('btn-flagged').style.display=flagged.size>0?'block':'none';showScreen('results');}
+function showReview(type){stopSpeaking();const body=document.getElementById('review-body'),title=document.getElementById('review-title');body.innerHTML='';let items=[];if(type==='wrong'){title.textContent=`Wrong Answers (${wrongAnswers.length})`;items=wrongAnswers;}else{title.textContent=`Flagged (${flagged.size})`;items=[...flagged].map(i=>({q:sessionQuestions[i],userAns:null,flagged:true}));}if(items.length===0){body.innerHTML='<p style="color:var(--gray);padding:20px;text-align:center;">Nothing to review!</p>';showScreen('review');return;}items.forEach((item,idx)=>{const q=item.q;const card=document.createElement('div');card.className='review-card '+(item.flagged?'flagged-card':'wrong-card');card.innerHTML=`<div class="review-q-header"><span class="review-status">${item.flagged?'🚩':'✗'}</span><span class="review-q-num">${q.cat} · Q${idx+1}</span></div><div class="review-q-text">${q.q}</div>${item.userAns?`<div class="review-answer-row review-wrong-ans">Your answer: ${item.userAns}</div>`:''}<div class="review-answer-row review-correct-ans">✓ Correct: ${q.opts[q.ans]}</div><div class="review-explanation">${q.exp}</div>`;body.appendChild(card);});showScreen('review');}
+
+// ── FLASHCARD ENGINE ──────────────────────────────────────────────
+function startFlashcard(){fcIndex=0;fcKnew=0;fcMissed=0;fcMissedCards=[];fcFlipped=false;fcQuestions=[...FLASHCARDS].sort(()=>Math.random()-0.5);renderFlashcard();showScreen('flashcard');}
+function renderFlashcard(){if(fcIndex>=fcQuestions.length){showFcReview();return;}const fc=fcQuestions[fcIndex];document.getElementById('fc-cat').textContent=fc.cat;document.getElementById('fc-q').textContent=fc.q;document.getElementById('fc-a').textContent=fc.a;document.getElementById('fc-counter').textContent=`${fcIndex+1} / ${fcQuestions.length}`;document.getElementById('fc-progress').style.width=((fcIndex/fcQuestions.length)*100)+'%';document.getElementById('fc-knew-count').textContent=`✓ ${fcKnew}`;document.getElementById('fc-miss-count').textContent=`○ ${fcMissed}`;const card=document.getElementById('fc-card');card.classList.remove('flipped');document.getElementById('fc-actions').style.display='none';document.getElementById('fc-hint').style.display='block';fcFlipped=false;}
+function flipCard(){if(fcFlipped)return;fcFlipped=true;document.getElementById('fc-card').classList.add('flipped');document.getElementById('fc-actions').style.display='flex';document.getElementById('fc-hint').style.display='none';}
+function fcAnswer(knew){if(knew){fcKnew++;}else{fcMissed++;fcMissedCards.push(fcQuestions[fcIndex]);}fcIndex++;renderFlashcard();}
+function showFcReview(){document.getElementById('fcr-knew').textContent=fcKnew;document.getElementById('fcr-missed').textContent=fcMissed;const list=document.getElementById('fcr-missed-list');list.innerHTML='';if(fcMissedCards.length===0){list.innerHTML='<p style="color:var(--green);text-align:center;padding:16px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:18px;letter-spacing:1px;">Perfect Score! 🎉</p>';}else{fcMissedCards.forEach(fc=>{const card=document.createElement('div');card.className='fcr-missed-card';card.innerHTML=`<div class="fcr-missed-cat">${fc.cat}</div><div class="fcr-missed-q">${fc.q}</div><div class="fcr-missed-a">${fc.a}</div>`;list.appendChild(card);});}showScreen('fc-review');}
+
+// ── MULTIPLICATION TABLE ──────────────────────────────────────────
+function buildMultTable(){const table=document.getElementById('mult-table');let html='<tr><th><span>×</span></th>';for(let i=1;i<=15;i++)html+=`<th><span>${i}</span></th>`;html+='</tr>';for(let r=1;r<=15;r++){html+=`<tr><th><span>${r}</span></th>`;for(let c=1;c<=15;c++){const v=r*c;let cls='';if(r===c)cls='diagonal';else if(v%10===0)cls='highlight';html+=`<td class="${cls}"><span>${v}</span></td>`;}html+='</tr>';}table.innerHTML=html;}
+
+// ── INIT ──────────────────────────────────────────────────────────
+renderHomeProgress();
+checkDrillAvailability();
+buildMultTable();
+
+if('serviceWorker' in navigator){const swCode=`const CACHE='math-prep-v1';const ASSETS=[self.location.href];self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match(e.request))));});`;const swBlob=new Blob([swCode],{type:'application/javascript'});const swUrl=URL.createObjectURL(swBlob);navigator.serviceWorker.register(swUrl).catch(()=>{});}
+
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;showInstallBanner();});
+function showInstallBanner(){if(localStorage.getItem('mathInstallDismissed'))return;const banner=document.getElementById('install-banner');if(banner)banner.style.display='flex';}
+function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;dismissInstall();});}
+function dismissInstall(){const banner=document.getElementById('install-banner');if(banner)banner.style.display='none';localStorage.setItem('mathInstallDismissed','1');}
+window.addEventListener('appinstalled',()=>{dismissInstall();});
+</script>
+
+<div id="install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#0c1a2e;border-top:1px solid #152840;padding:14px 18px;align-items:center;gap:14px;">
+  <div style="flex:1;">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:#00e5ff;letter-spacing:1px;text-transform:uppercase;">Install as App</div>
+    <div style="font-size:12px;color:#6a84a0;margin-top:2px;">Add to home screen for offline access</div>
+  </div>
+  <button onclick="installApp()" style="background:#00e5ff;color:#080f1a;border:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;padding:10px 20px;border-radius:4px;cursor:pointer;">Install</button>
+  <button onclick="dismissInstall()" style="background:none;border:1px solid #152840;color:#6a84a0;font-size:18px;width:32px;height:32px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+</div>
+</body>
+</html>
